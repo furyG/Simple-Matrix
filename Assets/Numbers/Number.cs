@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Tapes;
 using UnityEngine;
 
-
-public class Number : MonoBehaviour
+public class Number : TapeTile 
 {
     public bool boarded = false;
+    private float runTime;
 
     private enum nType
     {
@@ -17,12 +16,21 @@ public class Number : MonoBehaviour
     private nType type = nType.simple;
     private int number = 0;
 
-    private SpriteRenderer rend;
-
-    private void Awake()
+    protected override void Awake()
     {
-        rend = GetComponent<SpriteRenderer>();
+        base.Awake();
+
+        float edge = Random.Range(-0.1f, 0.1f);
+        float lPosX = (0.5f - scale.x / 2) * Mathf.Sign(edge);
+        transform.localPosition = new(lPosX, 0f);
+
+        runTime = C.main.numberRunTime-1;
+    }
+
+    private void Start()
+    {
         InvokeNumber();
+        StartCoroutine(NumberMove());
     }
 
     private void InvokeNumber()
@@ -59,4 +67,24 @@ public class Number : MonoBehaviour
         name = number.ToString();
     }
     private int GetRandomNum() => Random.Range(1, 8);
+
+    private IEnumerator NumberMove()
+    {
+        float startX = transform.localPosition.x;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < runTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float xPos = Mathf.Lerp(startX, startX * -1, elapsedTime / (runTime));
+            transform.localPosition = new(xPos, 0f);
+            yield return null;
+        }
+        Destroy(gameObject);
+    }
+    public override void Interact()
+    {
+        TapeHandler.instance.SetNumber(this);
+        StopAllCoroutines();
+    }
 }

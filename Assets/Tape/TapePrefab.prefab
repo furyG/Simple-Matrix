@@ -126,6 +126,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberPrefab: {fileID: 4816061077249226218, guid: d777f4cac6bdbf74696d8f967dd9dc1d, type: 3}
   bonusPrefab: {fileID: 9222008092945534783, guid: d1ab30677f5f6724b881a576df4636c2, type: 3}
-  numberSpawnTime: 2
   mouseOverColor: {r: 1, g: 0.7804361, b: 0.3726415, a: 1}
-  number: {fileID: 0}

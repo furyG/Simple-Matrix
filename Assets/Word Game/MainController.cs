@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Tapes;
 
 public enum gState
 {
@@ -12,8 +13,9 @@ public enum gState
 
 public class MainController : MonoBehaviour
 {
-    public GameObject tapePrefab;
-    public int tapeAmount = 3;
+    [SerializeField] private GameObject tapeAnchorPrefab;
+    [SerializeField] private int tapeAmount = 3;
+    public float numberRunTime;
 
     public float originRoundTime;
     private float roundTime;
@@ -26,7 +28,6 @@ public class MainController : MonoBehaviour
         set
         {
             _points = value;
-            C.ui.FillPoints(_points, maxPoints);
         }
     }
     private int _points;
@@ -50,15 +51,14 @@ public class MainController : MonoBehaviour
     {
         C.main = this;
         C.ui = GetComponent<UIController>();
-        C.points = GetComponent<PointsController>();
-
-        tapeAnchor = new GameObject("TapeAnchor").transform;
-        C.tape = tapeAnchor.AddComponent<TapeController>();
+        C.points = GetComponent<Points>();
     }
 
     private void Start()
     {
         State = gState.idle;
+
+        if(tapeAnchor == null) tapeAnchor = Instantiate(tapeAnchorPrefab).transform;
 
         roundTime = originRoundTime;
         maxPoints = originPoints;
@@ -66,9 +66,7 @@ public class MainController : MonoBehaviour
 
     public void StartGame()
     {
-        if (tapeAnchor.childCount > 0) C.tape.ClearField();
-
-        C.tape.SpawnTapes(tapeAnchor, tapePrefab, tapeAmount);
+        tapeAnchor.GetComponent<TapeSpawner>().SpawnTapes(tapeAmount);
 
         State = gState.playing;
         startTime = Time.time;
@@ -82,13 +80,14 @@ public class MainController : MonoBehaviour
             if (leftTime <= 0)
             {
                 State = gState.countPoints;
-                Points += C.points.CountPoints(C.tape.CreateMatrix());
+                C.points.Increment(C.points.CountPoints(GetComponent<MatrixCreator>().CreateMatrix()));
+                //Points += C.points.CountPoints(GetComponent<MatrixCreator>().CreateMatrix());
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            StartGame();
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    StartGame();
+        //}
     }
     public void IncreaseLevel()
     {
@@ -96,9 +95,9 @@ public class MainController : MonoBehaviour
         maxPoints += 25;
         C.ui.FillPoints(Points, maxPoints);
     }
-    public void BonusUp(bType type)
+    public void BonusUp(bType b)
     {
-        Debug.Log("TAKING BONUS OF TYPE: " + type);
+        Debug.Log("TAKING BONUS OF TYPE: " + b);
     }
     public void ResetPoints() => Points = 0;
 }

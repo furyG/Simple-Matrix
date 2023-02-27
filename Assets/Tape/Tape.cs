@@ -2,128 +2,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Tape : MonoBehaviour
+namespace Tapes
 {
-    public GameObject numberPrefab, bonusPrefab;
-    public int numberSpawnTime;
-    public Color mouseOverColor;
-    public GameObject number;
-
-    private lState state = lState.idle;
-    private Color originColor;
-    private SpriteRenderer rend;
-    private float buffer;
-    private enum lState
+    public class Tape : MonoBehaviour
     {
-        idle,
-        active,
-    }
+        [SerializeField] private GameObject numberPrefab, bonusPrefab;
+        [SerializeField] private Color mouseOverColor;
 
-    private void Awake()
-    {
-        rend = GetComponent<SpriteRenderer>();
-
-        originColor = rend.color;
-    }
-
-    public void InvokeTape(float invokeTime)
-    {
-        Invoke(nameof(SpawnNumber), invokeTime);
-        Invoke(nameof(SpawnBonus), numberSpawnTime * 3);
-    }
-    private void SpawnNumber()
-    {
-        state = lState.active;
-
-        number = Instantiate(numberPrefab, transform);
-        Vector3 lScale = number.transform.localScale;
-        lScale = new(lScale.x / 10, 1, lScale.z);
-        number.transform.localScale = lScale;
-
-        buffer = number.transform.localScale.x + 0.3f;
-
-        float edge = Random.Range(-0.1f, 0.1f);
-        float lPosX = (0.5f - lScale.x / 2) * Mathf.Sign(edge);
-        number.transform.localPosition = new(lPosX, 0f);
-
-        StartCoroutine(NumberMove(number.transform));
-
-        Invoke(nameof(SpawnNumber), numberSpawnTime+2);
-    }
-
-    private IEnumerator NumberMove(Transform number)
-    {
-        float startX = number.transform.localPosition.x;
-
-        float elapsedTime = 0f;
-        while(elapsedTime < numberSpawnTime + 2)
+        public Number number;
+        private float numberSpawnTime;
+        private tState state = tState.idle;
+        private Color originColor;
+        private SpriteRenderer rend;
+        private float buffer;
+        private enum tState
         {
-            elapsedTime += Time.deltaTime;
-            float xPos = Mathf.Lerp(startX, startX*-1, elapsedTime / (numberSpawnTime+2));
-            number.transform.localPosition = new(xPos, 0f);
-            yield return null;
+            idle,
+            active,
         }
-        Destroy(number.gameObject);
-    }
 
-    private void SpawnBonus()
-    {
-        float chance = Random.Range(0f, 1f);
-        if (chance > 0.6f)
+        private void Awake() => rend = GetComponent<SpriteRenderer>();
+ 
+        private void Start()
         {
-            GameObject bonus = Instantiate(bonusPrefab, transform);
-            Vector3 bScale = bonus.transform.localScale;
-            bScale = new(bScale.x / 8, 1, bScale.z);
-            bonus.transform.localScale = bScale;
-            bonus.transform.localPosition = BonusPosition();
+            originColor = rend.color;
+            numberSpawnTime = C.main.numberRunTime;
+
+            Invoke(nameof(SpawnTapeTile), numberSpawnTime-3);
         }
-        Invoke(nameof(SpawnBonus), numberSpawnTime + 2);
-    }
-    private Vector3 BonusPosition()
-    {
-        float xPos = Random.Range(-0.3f, 0.3f);
-        if (transform.childCount > 0)
+
+        private void SpawnTapeTile()
         {
-            int index = Random.Range(0, transform.childCount);
-            xPos = transform.GetChild(index).localPosition.x;
-            if (transform.GetChild(index).name != 0.ToString())
-            {
-                xPos -= buffer * Mathf.Sign(xPos);
-            }
+            state = tState.active;
+
+            GameObject tile = Instantiate(numberPrefab, transform);
+            number = tile.GetComponent<Number>();
+
+            Invoke(nameof(SpawnTapeTile), numberSpawnTime);
+
+            float chance = Random.Range(0f, 1f);
+            if (chance > 0.6f) Instantiate(bonusPrefab, transform);
         }
-        return new(xPos, 0, 0);
-    }
-    private void OnMouseDown()
-    {
-        if (state != lState.active) return;
+        private void OnMouseDown()
+        {
+            if (state != tState.active) return;
 
-        rend.color = originColor;
-        state = lState.idle;
-        C.tape.SetNumber(this);
-        number = null;
+            rend.color = originColor;
+            state = tState.idle;
 
-        StopAllCoroutines();
-    }
-    private void OnMouseEnter()
-    {
-        if (state != lState.active) return;
+            number.Interact();
+            number = null;
+        }
+        private void OnMouseEnter()
+        {
+            if (state != tState.active) return;
 
-        rend.color = mouseOverColor;
-    }
-    private void OnMouseExit()
-    {
-        if (state != lState.active) return;
+            rend.color = mouseOverColor;
+        }
+        private void OnMouseExit()
+        {
+            if (state != tState.active) return;
 
-        rend.color = originColor;
-    }
-    public void StopTape()
-    {
-        state = lState.idle;
+            rend.color = originColor;
+        }
+        public void StopTape()
+        {
+            state = tState.idle;
 
-        if (number != null) Destroy(number);
+            if (number != null) Destroy(number.gameObject);
 
-        StopAllCoroutines();
-        CancelInvoke();
+            StopAllCoroutines();
+            CancelInvoke();
+        }
     }
 }

@@ -1,24 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using Tapes;
 using UnityEngine;
+
     public enum bType
     {
         time = 0,
         slow = 1
     }
 
-public class Bonus : MonoBehaviour
+public class Bonus : TapeTile
 {
     public int lifeTime = 5;
 
-    public bType type = bType.time;
+    private bType type = bType.time;
 
-    private SpriteRenderer rend;
-
-    private void Awake()
+    protected override void Awake()
     {
-        rend = GetComponent<SpriteRenderer>();
+        base.Awake();
+        SetStartPos();
     }
+    private void SetStartPos()
+    {
+        float xPos = Random.Range(-0.3f, 0.3f);
+        if (parent.childCount > 0)
+        {
+            int index = Random.Range(0, transform.childCount);
+            xPos = parent.GetChild(index).localPosition.x;
+            if (parent.GetChild(index).name != 0.ToString())
+            {
+                xPos -= buffer * Mathf.Sign(xPos);
+            }
+        }
+        transform.localPosition = new(xPos, 0, 0);
+    }
+
     private void Start()
     {
         float chance = Random.Range(0.0f, 1.0f);
@@ -35,4 +51,5 @@ public class Bonus : MonoBehaviour
 
         Destroy(gameObject, lifeTime);
     }
+    public override void Interact() => C.main.BonusUp(type);
 }

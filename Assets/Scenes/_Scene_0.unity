@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 44460794}
   - component: {fileID: 44460796}
   - component: {fileID: 44460795}
+  - component: {fileID: 44460797}
   m_Layer: 5
   m_Name: PlayScreen
   m_TagString: Untagged
@@ -201,6 +202,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 44460793}
   m_CullTransparentMesh: 1
+--- !u!114 &44460797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44460793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cced9e9a21d0264c85a4b50a8a447d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: {fileID: 519420035}
+  pointsImage: {fileID: 2035733223}
+  pointsTxt: {fileID: 2001785199}
 --- !u!1 &158681091
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +623,7 @@ GameObject:
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
+  - component: {fileID: 519420036}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -692,8 +709,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874aa5174604eed489b736c650422ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tapePrefab: {fileID: 5259935415983581235, guid: 8d91b31f9f1c67742940e7090adf8bdd, type: 3}
+  tapeAnchorPrefab: {fileID: 1367859052362983073, guid: 943e76b55e7d48e459575a57fd67a684, type: 3}
   tapeAmount: 3
+  numberRunTime: 4
   originRoundTime: 10
   originPoints: 20
 --- !u!114 &519420034
@@ -722,6 +740,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2d1a14a711ce1e4f8b8b23a03263662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &519420036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14207efca8610a14184f13080b263c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &747323159
