@@ -9,22 +9,17 @@ public class UIController : MonoBehaviour
 
     private Button restartGame, continueGame;
     private Transform leadersPanel, timer, points;
-    private Image timerFill, pointsFill;
-    private Text pointsTxt;
+    private Image timerFill;
 
     private void Awake()
     {
         timer = panels[1].GetChild(0);
         timerFill = timer.GetChild(0).GetComponent<Image>();
 
-        points = panels[1].GetChild(1);
-        pointsFill = points.GetChild(0).GetComponent<Image>();
-
         leadersPanel = panels[0].GetChild(2);
 
         restartGame = panels[2].GetChild(0).GetComponent<Button>();
         continueGame = panels[2].GetChild(1).GetComponent<Button>();
-        pointsTxt = panels[2].GetChild(2).GetComponent<Text>();
     }
 
     public void ChangeTimer(float leftTime, float roundTime)
@@ -44,10 +39,10 @@ public class UIController : MonoBehaviour
     }
     public void FillPoints(float points, float maxPoints)
     {
-        pointsTxt.text = points + " of " + maxPoints;
+        //pointsTxt.text = points + " of " + maxPoints;
 
-        pointsFill.fillAmount = points / maxPoints;
+        //pointsFill.fillAmount = points / maxPoints;
 
-        continueGame.interactable = points >= maxPoints;
+        //continueGame.interactable = points >= maxPoints;
     }
 }

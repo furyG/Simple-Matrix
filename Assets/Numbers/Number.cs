@@ -24,7 +24,7 @@ public class Number : TapeTile
         float lPosX = (0.5f - scale.x / 2) * Mathf.Sign(edge);
         transform.localPosition = new(lPosX, 0f);
 
-        runTime = C.main.numberRunTime-1;
+        runTime = Balance.instance.NumbersRunTime;
     }
 
     private void Start()

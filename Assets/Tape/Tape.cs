@@ -26,7 +26,7 @@ namespace Tapes
         private void Start()
         {
             originColor = rend.color;
-            numberSpawnTime = C.main.numberRunTime;
+            numberSpawnTime = Balance.instance.SpawnNumbersTime;
 
             Invoke(nameof(SpawnTapeTile), numberSpawnTime-3);
         }

@@ -10,7 +10,7 @@ namespace Tapes
     {
         public static TapeHandler instance;
 
-        protected static List<Tape> tapes = new List<Tape>();
+        public static List<Tape> tapes = new List<Tape>();
         protected static List<float> preferredXPos = new List<float>();
         protected static GameObject[,] numberGOs;
 

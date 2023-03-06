@@ -1,103 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using Tapes;
-
-public enum gState
-{
-    idle = 0,
-    playing = 1,
-    countPoints = 2
-}
 
 public class MainController : MonoBehaviour
 {
-    [SerializeField] private GameObject tapeAnchorPrefab;
-    [SerializeField] private int tapeAmount = 3;
-    public float numberRunTime;
+    public Level Lvl { get; private set; }
+    public Timer Timer { get; private set; }
+    public Points Points{ get; private set; }
 
-    public float originRoundTime;
-    private float roundTime;
+    public StateMachine MainStateMachine => mainStateMachine;
 
-    public int originPoints;
-    private int maxPoints;
-    public int Points
-    {
-        get { return _points; }
-        set
-        {
-            _points = value;
-        }
-    }
-    private int _points;
-
-    private gState State
-    {
-        get { return _state; }
-        set
-        {
-            _state = value;
-            C.ui.TogglePanel((int)value);
-        }
-    }
-    private gState _state;
-
-    private float startTime;
-    private float leftTime;
-    private Transform tapeAnchor;
+    private StateMachine mainStateMachine;
 
     private void Awake()
     {
         C.main = this;
-        C.ui = GetComponent<UIController>();
-        C.points = GetComponent<Points>();
+
+        Points = GetComponent<Points>();
+        Lvl = GetComponent<Level>();
+        Timer = GetComponent<Timer>();
+
+        mainStateMachine = new StateMachine(this);
     }
 
     private void Start()
     {
-        State = gState.idle;
-
-        if(tapeAnchor == null) tapeAnchor = Instantiate(tapeAnchorPrefab).transform;
-
-        roundTime = originRoundTime;
-        maxPoints = originPoints;
+        mainStateMachine.Initialize(mainStateMachine.idleState);    
     }
 
     public void StartGame()
     {
-        tapeAnchor.GetComponent<TapeSpawner>().SpawnTapes(tapeAmount);
-
-        State = gState.playing;
-        startTime = Time.time;
+        Debug.Log("START GAME");
+        mainStateMachine.TransitionTo(mainStateMachine.playState);
     }
     private void Update()
     {
-        if(State == gState.playing)
-        {
-            leftTime = startTime + roundTime - Time.time;
-            C.ui.ChangeTimer(leftTime, roundTime);
-            if (leftTime <= 0)
-            {
-                State = gState.countPoints;
-                C.points.Increment(C.points.CountPoints(GetComponent<MatrixCreator>().CreateMatrix()));
-                //Points += C.points.CountPoints(GetComponent<MatrixCreator>().CreateMatrix());
-            }
-        }
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    StartGame();
-        //}
-    }
-    public void IncreaseLevel()
-    {
-        roundTime += 5;
-        maxPoints += 25;
-        C.ui.FillPoints(Points, maxPoints);
+        mainStateMachine.Update();
     }
     public void BonusUp(bType b)
     {
-        Debug.Log("TAKING BONUS OF TYPE: " + b);
+        
     }
-    public void ResetPoints() => Points = 0;
 }

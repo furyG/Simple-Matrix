@@ -6,8 +6,6 @@ namespace Tapes
 {
     public class TapeSpawner : TapeHandler
     {
-        [SerializeField] private GameObject tapePrefab;
-
         public void SpawnTapes(int tapeAmount)
         {
             if (transform.childCount > 0) ClearField();
@@ -18,8 +16,8 @@ namespace Tapes
             {
                 Vector2 pos = new(0, (height / tapeAmount + 0.6f) * i);
 
-                GameObject t = Instantiate(tapePrefab.gameObject, pos,
-                    Quaternion.identity, transform);
+                GameObject tPref = Resources.Load("Prefabs/Tape") as GameObject;
+                GameObject t = Instantiate(tPref, pos, Quaternion.identity, transform);
             
                 Vector3 scale = t.transform.localScale;
                 scale = new Vector3(scale.x, scale.y - 0.1f * tapeAmount, scale.y);

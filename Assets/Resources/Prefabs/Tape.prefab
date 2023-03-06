@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5259935415983581236}
   - component: {fileID: -8573732556471656275}
   m_Layer: 0
-  m_Name: TapePrefab
+  m_Name: Tape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
