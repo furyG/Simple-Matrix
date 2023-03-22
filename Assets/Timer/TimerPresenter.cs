@@ -2,53 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Architecture;
+using System;
 
 public class TimerPresenter : MonoBehaviour
 {
-    [SerializeField] private Level lvl;
-    [SerializeField] private Timer timer;
     [SerializeField] private Image timerFill;
+
+    private TimerInteractor timerInteractor;
 
     private void Start()
     {
-        if (timer != null) timer.TimeChanged += OnTimeChanged;
-        if (lvl != null) lvl.LevelChanged += ChangeTimer;
-        UpdateView();
+        timerInteractor = Game.GetInteractor<TimerInteractor>();
+        timerInteractor.OnTimerValueChangedEvent += OnTimerValueChanged;
+        timerInteractor.OnTimerFinishedEvent += OnTimerFinished;
     }
     private void OnDestroy()
     {
-        if (timer != null) timer.TimeChanged -= OnTimeChanged;
-        if (lvl != null) lvl.LevelChanged -= ChangeTimer;
+        timerInteractor.OnTimerValueChangedEvent -= OnTimerValueChanged;
+        timerInteractor.OnTimerFinishedEvent -= OnTimerFinished;
     }
-
-    public void ChangeTimer(float lvlStartTime)
+    private void OnTimerFinished()
     {
-        timer?.ChangeTimer(lvlStartTime);
-    }
-    public void IncreaseRoundTime()
-    {
-        timer?.IncreaseRoundTime();
-    }
-    private void UpdateView()
-    {
-        if (timer == null) return;
-        if (timerFill != null && timer.LeftTime != 0)
-        {
-            timerFill.fillAmount = timer.LeftTime / timer.RoundTime;
-        }
-    }
-    private IEnumerator ChangeTimerFill()
-    {
-        while(timer.LeftTime > 0)
-        {
-            timer.LeftTime -= 1 * Time.deltaTime;
-            UpdateView();
-            yield return null;
-        }
 
     }
-    private void OnTimeChanged()
+    private void OnTimerValueChanged(float remainingSeconds)
     {
-        StartCoroutine(ChangeTimerFill());
+        timerFill.fillAmount = remainingSeconds / timerInteractor.roundTime;
     }
+
+    private void StartTimerClicked()
+    {
+        timerInteractor.Start();
+    }
+    private void PauseTimerClicked()
+    {
+        if (timerInteractor.isPaused) timerInteractor.Unpause();
+        else timerInteractor.Pause();
+    }
+    private void StopTimerClicked()
+    {
+
+    }
+
 }

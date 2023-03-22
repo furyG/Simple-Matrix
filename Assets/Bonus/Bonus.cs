@@ -9,18 +9,23 @@ using UnityEngine;
         slow = 1
     }
 
-public class Bonus : TapeTile
+public class Bonus : Tile
 {
-    public int lifeTime = 5;
+    public override SpawnableType Type => SpawnableType.Bonus;
 
+    private int lifeTime = 5;
     private bType type = bType.time;
 
-    protected override void Awake()
+    private float buffer = 0;
+
+    protected override void Start()
     {
-        base.Awake();
-        SetStartPos();
+        base.Start();
+
+        buffer = scale.x / 2 + 0.8f;
     }
-    private void SetStartPos()
+
+    protected override void SetStartPos()
     {
         float xPos = Random.Range(-0.3f, 0.3f);
         if (parent.childCount > 0)
@@ -34,17 +39,14 @@ public class Bonus : TapeTile
         }
         transform.localPosition = new(xPos, 0, 0);
     }
-
-    private void Start()
+    protected override void SetType()
     {
         float chance = Random.Range(0.0f, 1.0f);
         if (chance > 0.5f) type = bType.time;
         else type = bType.slow;
-
-        InvokeBonus();
     }
 
-    private void InvokeBonus()
+    protected override void InvokeTapeTile()
     {
         Sprite[] bSprites = Resources.LoadAll<Sprite>("Sprites/bonuses");
         rend.sprite = bSprites[(int)type];

@@ -1,3 +1,5 @@
+using Architecture;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,49 +7,52 @@ using UnityEngine.UI;
 
 public class PointsPresenter : MonoBehaviour
 {
-    [SerializeField] Points points;
-    [SerializeField] Image pointsImage;
-    [SerializeField] Text pointsTxt;
+    [SerializeField] private Image pointsImage;
+    [SerializeField] private Text pointsTxt;
+    [SerializeField] private Transform canvasTransform;
+
+    private PointsInteractor pointsInteractor;
+    private FloatingPointsHandler floatingPointsHandler;
 
     private void Start()
     {
-        if(points != null)
+        pointsInteractor = Game.GetInteractor<PointsInteractor>();
+        if(pointsInteractor != null)
         {
-            points.PointsChanged += OnPointsChanged;
+            pointsInteractor.OnPointsChanged += OnPointsChangedEvent;
+            pointsInteractor.OnComboRecieved += OnComboRecievedEvent;
         }
-        Restart();
-        UpdateView();
+
+        floatingPointsHandler = new FloatingPointsHandler(pointsInteractor, canvasTransform, pointsTxt.transform.position);
     }
+
+
     private void OnDestroy()
     {
-        if(points != null)
+        if (pointsInteractor != null)
         {
-            points.PointsChanged -= OnPointsChanged;
+            pointsInteractor.OnPointsChanged -= OnPointsChangedEvent;
+            pointsInteractor.OnComboRecieved -= OnComboRecievedEvent;
         }
     }
-    public void PointsDown(int amount)
+    private void OnComboRecievedEvent(List<Numberable> numsToAnimate)
     {
-        points?.Decrement(amount);
-    }
-    public void PointsUp(int amount)
-    {
-        points?.Increment(amount);
-    }
-    public void Restart()
-    {
-        points?.Restart();
+        foreach(var num in numsToAnimate)
+        {
+            floatingPointsHandler.InitFloatingPoints(num);
+        }
     }
     private void UpdateView()
     {
-        if (points == null) return;
+        if (pointsInteractor == null) return;
 
-        if(pointsTxt != null && pointsImage != null && points.MaxPointsOnLvl != 0)
+        if(pointsTxt != null && pointsImage != null)
         {
-            pointsImage.fillAmount = (float)points.CurrentPoints / (float)points.MaxPointsOnLvl;
-            pointsTxt.text = points.CurrentPoints + " of " + points.MaxPointsOnLvl;
+            pointsImage.fillAmount = (float)pointsInteractor.points / (float)pointsInteractor.maxPointsOnLvl;
+            pointsTxt.text = pointsInteractor.points.ToString() + " of " + pointsInteractor.maxPointsOnLvl.ToString();
         }
     }
-    public void OnPointsChanged()
+    private void OnPointsChangedEvent()
     {
         UpdateView();
     }

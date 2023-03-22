@@ -15,6 +15,9 @@ public class SceneZeroConfig : SceneConfig
         var interactorsMap = new Dictionary<Type, Interactor>();
 
         this.CreateInteractor<PointsInteractor>(interactorsMap);
+        this.CreateInteractor<TimerInteractor>(interactorsMap);
+        this.CreateInteractor<LevelInteractor>(interactorsMap);
+        this.CreateInteractor<TapesInteractor>(interactorsMap);
 
         return interactorsMap;
     }
@@ -24,6 +27,9 @@ public class SceneZeroConfig : SceneConfig
         var repositoriesMap = new Dictionary<Type, Repository>();
 
         this.CreateRepository<PointsRepository>(repositoriesMap);
+        this.CreateRepository<TimerRepository>(repositoriesMap);
+        this.CreateRepository<LevelRepository>(repositoriesMap);
+        this.CreateRepository<TapesRepository>(repositoriesMap);
 
         return repositoriesMap;
     }

@@ -1,74 +1,71 @@
 using System.Collections;
-using Tapes;
 using UnityEngine;
 
-public class Number : TapeTile 
+public class Number : Numberable
 {
-    public bool boarded = false;
-    private float runTime;
+    public override SpawnableType Type => SpawnableType.Number;
 
-    private enum nType
+    private enum numberType
     {
         simple,
         allNums,
         changing
     }
-    private nType type = nType.simple;
-    private int number = 0;
+    private float runTime;
+    private numberType type = numberType.simple;
 
     protected override void Awake()
     {
         base.Awake();
 
-        float edge = Random.Range(-0.1f, 0.1f);
-        float lPosX = (0.5f - scale.x / 2) * Mathf.Sign(edge);
-        transform.localPosition = new(lPosX, 0f);
-
         runTime = Balance.instance.NumbersRunTime;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        InvokeNumber();
-        StartCoroutine(NumberMove());
-    }
+        base.Start();
 
-    private void InvokeNumber()
+        StartCoroutine(NumberMoveRoutine());
+    }
+    protected override void SetStartPos()
+    {
+        float edge = Random.Range(-0.1f, 0.1f);
+        float lPosX = (0.5f - scale.x / 2) * Mathf.Sign(edge);
+        transform.localPosition = new(lPosX, 0f);
+    }
+    protected override void SetType()
     {
         float chance = Random.Range(0f, 1f);
-        if(chance > 0.8f)
+        if (chance > 0.8f)
         {
-            type = nType.changing;
-            if(chance > 0.9f)
+            type = numberType.changing;
+            if (chance > 0.9f)
             {
-                type = nType.allNums;
+                type = numberType.allNums;
             }
         }
-        ChangeNumValue();
     }
-    private void ChangeNumValue()
+    protected override void InvokeTapeTile()
     {
         if (boarded) return;
         switch (type)
         {
-            case nType.simple:
-                number = GetRandomNum();
+            case numberType.simple:
+                Number = GetRandomNum();
                 break;
-            case nType.changing:
-                Invoke(nameof(ChangeNumValue), 0.8f);
-                Mathf.Clamp(number++, 0, 7);
+            case numberType.changing:
+                Mathf.Clamp(Number++, 0, 7);
+                Invoke(nameof(InvokeTapeTile), 0.8f);
                 break;
-            case nType.allNums:
-                number = 10;
+            case numberType.allNums:
+                Number = 10;
                 break;
         }
-        Sprite[] s = Resources.LoadAll<Sprite>("Sprites/numbers");
-        rend.sprite = s[number];
-        name = number.ToString();
+        
     }
     private int GetRandomNum() => Random.Range(1, 8);
 
-    private IEnumerator NumberMove()
+    private IEnumerator NumberMoveRoutine()
     {
         float startX = transform.localPosition.x;
 
@@ -81,10 +78,5 @@ public class Number : TapeTile
             yield return null;
         }
         Destroy(gameObject);
-    }
-    public override void Interact()
-    {
-        TapeHandler.instance.SetNumber(this);
-        StopAllCoroutines();
     }
 }
