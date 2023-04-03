@@ -13,35 +13,26 @@ public class LevelPresenter : MonoBehaviour
         levelInteractor = Game.GetInteractor<LevelInteractor>();
         if (levelInteractor != null)
         {
-            levelInteractor.levelChangedEvent += OnLevelChanged;
+            levelInteractor.levelChanged += OnLevelChanged;
         }
     }
     private void OnDestroy()
     {
-        if(levelInteractor != null) levelInteractor.levelChangedEvent -= OnLevelChanged;
+        if(levelInteractor != null) levelInteractor.levelChanged -= OnLevelChanged;
     }
 
-    public void NextLevel()
-    {
-        levelInteractor?.NextLevel();
-    }
-    public void NewGame()
-    {
-        levelInteractor?.NewGame();
-    }
-
-    public void UpdateView()
+    public void UpdateView(int currentLevel)
     {
         if (levelInteractor == null) return;
 
-        if(lvlTxt != null && levelInteractor.currentLevel != 0)
+        if(lvlTxt != null && currentLevel != 0)
         {
-            lvlTxt.text = "Level: " + levelInteractor.currentLevel;
+            lvlTxt.text = "Level: " + currentLevel;
         }
     }
 
-    public void OnLevelChanged()
+    public void OnLevelChanged(int currentLevel)
     {
-        UpdateView();
+        UpdateView(currentLevel);
     }
 }

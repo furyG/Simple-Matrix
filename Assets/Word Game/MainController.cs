@@ -5,7 +5,18 @@ public class MainController : MonoBehaviour
 {
     public StateMachine MainStateMachine => mainStateMachine;
 
+    public int Lifes
+    {
+        get => _lifes;
+        set => _lifes = value;
+    }
+    private int _lifes = 0;
+
     private StateMachine mainStateMachine;
+
+    private ButtonsInteractor buttonsInteractor;
+    private StartButton startButton;
+    private ContinueButton continueButton;
 
     private void Awake()
     {
@@ -13,29 +24,35 @@ public class MainController : MonoBehaviour
         C.main = this;
 
         mainStateMachine = new StateMachine(this);
-        ButtonsController.StartButtonPushed += StartGame;
+    }
+    private void Start()
+    {
+        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
+
+        startButton = buttonsInteractor.GetButton<StartButton>();
+        continueButton = buttonsInteractor.GetButton<ContinueButton>();
+
+        startButton.buttonClicked += StartGame;
+        continueButton.buttonClicked += ContinueGame;
+
+        mainStateMachine.Initialize(mainStateMachine.idleState);    
     }
     private void OnDisable()
     {
-        ButtonsController.StartButtonPushed -= StartGame;
+        startButton.buttonClicked -= StartGame;
+        continueButton.buttonClicked -= ContinueGame;
     }
 
-    private void Start()
+    private void StartGame()
     {
-        mainStateMachine.Initialize(mainStateMachine.idleState);    
+        mainStateMachine.TransitionTo(mainStateMachine.playState);
     }
-
-    public void StartGame()
+    private void ContinueGame()
     {
-        Debug.Log("START GAME");
         mainStateMachine.TransitionTo(mainStateMachine.playState);
     }
     private void Update()
     {
         mainStateMachine.Update();
-    }
-    public void BonusUp(bType b)
-    {
-        
     }
 }

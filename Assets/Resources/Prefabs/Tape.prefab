@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5259935415983581237}
   - component: {fileID: 5259935415983581234}
   - component: {fileID: 5259935415983581236}
-  - component: {fileID: -8573732556471656275}
+  - component: {fileID: 5576670540914768821}
   m_Layer: 0
   m_Name: Tape
   m_TagString: Untagged
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-8573732556471656275
+--- !u!114 &5576670540914768821
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,6 +124,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38213651959046a45b5b96367bd14951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberPrefab: {fileID: 4816061077249226218, guid: d777f4cac6bdbf74696d8f967dd9dc1d, type: 3}
-  bonusPrefab: {fileID: 9222008092945534783, guid: d1ab30677f5f6724b881a576df4636c2, type: 3}
-  mouseOverColor: {r: 1, g: 0.7804361, b: 0.3726415, a: 1}

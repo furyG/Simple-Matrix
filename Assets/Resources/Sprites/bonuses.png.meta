@@ -170,6 +170,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: bonuses_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a3ac1c62011fcf4b8ad365dfa7af495
+      internalID: -1671759398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bonuses_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e81974e89871c6847a276b93467891dc
+      internalID: 1153140448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -181,7 +223,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      bonuses_2: -1671759398
       bonuses_1: -1521754984
+      bonuses_3: 1153140448
       bonuses_0: 1650451470
   spritePackingTag: 
   pSDRemoveMatte: 0

@@ -14,7 +14,7 @@ public class StateMachine
     public PlayState playState;
     public CountState countState;
 
-    public event Action <IState> stateChanged;
+    public event Action <IState> onStateChanged;
 
     public void Initialize(IState state)
     {
@@ -27,7 +27,7 @@ public class StateMachine
         CurrentState = nextState;
         nextState.Enter();
 
-        stateChanged?.Invoke(CurrentState);
+        onStateChanged?.Invoke(CurrentState);
         Debug.Log("Transition to: "+nextState.ToString());
     }
     public void Update()

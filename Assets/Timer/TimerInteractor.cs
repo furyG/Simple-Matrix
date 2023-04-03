@@ -2,7 +2,7 @@ using Architecture;
 using System;
 using UnityEngine;
 
-public class TimerInteractor : Interactor
+public class TimerInteractor : Interactor, IBonusReciever
 {
     public event Action<float> OnTimerValueChangedEvent;
     public event Action OnTimerFinishedEvent;
@@ -22,22 +22,10 @@ public class TimerInteractor : Interactor
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<TimerRepository>();    
-
         
         mainStateMachine = C.main.MainStateMachine;
-        if(mainStateMachine != null)
-        {
-            mainStateMachine.stateChanged += OnStateChanged;
-        }
     }
 
-    public void OnStateChanged(IState state)
-    {
-        if (state == mainStateMachine.playState)
-        {
-            Start(roundTime);
-        }
-    }
     public void SetTime(float seconds)
     {
         remainingSeconds = seconds;
@@ -59,6 +47,14 @@ public class TimerInteractor : Interactor
     {
         SetTime(seconds);
         Start();
+    }
+    public void StartRoundTimer()
+    {
+        if(remainingSeconds <= 0)
+        {
+            SetTime(roundTime);
+            Start();
+        }
     }
     public void Pause()
     {
@@ -107,5 +103,11 @@ public class TimerInteractor : Interactor
         {
             OnTimerValueChangedEvent?.Invoke(remainingSeconds);
         }
+    }
+
+    public void TakeBonus()
+    {
+        remainingSeconds += Balance.instance.TimerBonusIncrementAmount;
+        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.instance.FirstRoundTime);
     }
 }

@@ -3,19 +3,38 @@ using Architecture;
 
 public class LevelInteractor : Interactor
 {
-    public event Action levelChangedEvent;
+    public event Action<int> levelChanged;
 
     public int currentLevel => repository.level;
 
+    private ButtonsInteractor buttonsInteractor;
+    private ContinueButton continueButton;
+    private StartButton startButton;
+
     private LevelRepository repository;
+    
 
     public override void OnCreate()
     {
         repository = Game.GetRepository<LevelRepository>();
+
+        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
     }
     public override void Initialize()
     {
-        levelChangedEvent?.Invoke();
+        levelChanged?.Invoke(currentLevel);
+
+        continueButton = buttonsInteractor.GetButton<ContinueButton>();
+        startButton = buttonsInteractor.GetButton<StartButton>();
+
+        if (continueButton != null)
+        {
+            continueButton.buttonClicked += NextLevel;
+        }
+        if (startButton != null)
+        {
+            startButton.buttonClicked += NewGame;
+        }
     }
 
     public void NextLevel()
@@ -32,6 +51,6 @@ public class LevelInteractor : Interactor
     }
     public void UpdateLevel()
     {
-        levelChangedEvent?.Invoke();
+        levelChanged?.Invoke(currentLevel);
     }
 }

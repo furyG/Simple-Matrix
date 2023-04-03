@@ -7,7 +7,7 @@ namespace Architecture
 {
     public static class Game 
     {
-        public static event Action OnGameInitializedEvent;
+        //public static event Action OnGameInitializedEvent;
 
         private static Scene currentScene;
         public static SceneConfig sceneConfig;

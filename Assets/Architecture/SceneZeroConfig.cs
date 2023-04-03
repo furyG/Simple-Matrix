@@ -18,6 +18,9 @@ public class SceneZeroConfig : SceneConfig
         this.CreateInteractor<TimerInteractor>(interactorsMap);
         this.CreateInteractor<LevelInteractor>(interactorsMap);
         this.CreateInteractor<TapesInteractor>(interactorsMap);
+        this.CreateInteractor<ButtonsInteractor>(interactorsMap);
+        this.CreateInteractor<LifesInteractor>(interactorsMap);
+        this.CreateInteractor<BonusInteractor>(interactorsMap);
 
         return interactorsMap;
     }
@@ -30,6 +33,7 @@ public class SceneZeroConfig : SceneConfig
         this.CreateRepository<TimerRepository>(repositoriesMap);
         this.CreateRepository<LevelRepository>(repositoriesMap);
         this.CreateRepository<TapesRepository>(repositoriesMap);
+        this.CreateRepository<LifesRepository>(repositoriesMap) ;
 
         return repositoriesMap;
     }

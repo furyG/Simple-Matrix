@@ -1,27 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Architecture;
 
 public class PanelsController : MonoBehaviour
 {
-    [SerializeField] private GameObject startScreen, pointsScreen, playScreen;
+    [SerializeField] private GameObject pointsScreen, playScreen, pauseScreen;
 
+    private ButtonsInteractor buttonsInteractor;
     private StateMachine mainStateMachine;
 
     private void Start()
     {
         mainStateMachine = C.main.MainStateMachine;
-        mainStateMachine.stateChanged += OnStateChanged;
+        mainStateMachine.onStateChanged += OnStateChanged;
     }
     private void OnDisable()
     {
-        mainStateMachine.stateChanged -= OnStateChanged;
+        mainStateMachine.onStateChanged -= OnStateChanged;
     }
 
     public void OnStateChanged(IState state)
     {
-        startScreen.SetActive(state == mainStateMachine.idleState);
         pointsScreen.SetActive(state == mainStateMachine.countState);
     }
 }

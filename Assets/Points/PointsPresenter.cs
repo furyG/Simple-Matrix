@@ -11,27 +11,29 @@ public class PointsPresenter : MonoBehaviour
     [SerializeField] private Text pointsTxt;
     [SerializeField] private Transform canvasTransform;
 
+
+    private Image activePointsFill;
     private PointsInteractor pointsInteractor;
     private FloatingPointsHandler floatingPointsHandler;
 
     private void Start()
     {
         pointsInteractor = Game.GetInteractor<PointsInteractor>();
+
         if(pointsInteractor != null)
         {
-            pointsInteractor.OnPointsChanged += OnPointsChangedEvent;
+            pointsInteractor.pointsChanged += OnPointsChangedEvent;
             pointsInteractor.OnComboRecieved += OnComboRecievedEvent;
         }
 
-        floatingPointsHandler = new FloatingPointsHandler(pointsInteractor, canvasTransform, pointsTxt.transform.position);
+        floatingPointsHandler = new FloatingPointsHandler(this, canvasTransform, pointsImage.transform.position);
     }
-
 
     private void OnDestroy()
     {
         if (pointsInteractor != null)
         {
-            pointsInteractor.OnPointsChanged -= OnPointsChangedEvent;
+            pointsInteractor.pointsChanged -= OnPointsChangedEvent;
             pointsInteractor.OnComboRecieved -= OnComboRecievedEvent;
         }
     }
@@ -55,5 +57,9 @@ public class PointsPresenter : MonoBehaviour
     private void OnPointsChangedEvent()
     {
         UpdateView();
+    }
+    public void FPCallback(FloatingPoints floatingPoints)
+    {
+        //delete
     }
 }
