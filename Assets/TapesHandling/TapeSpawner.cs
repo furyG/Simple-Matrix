@@ -1,18 +1,34 @@
 using Architecture;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Tapes
 {
     public class TapeSpawner : MonoBehaviour
     {
-        private int tapeAmount;
+        public List<TapeManager> tapes => _tapes;
+        private List<TapeManager> _tapes;
+        private int tapesAmount
+        {
+            get => _tapesAmount;
+            set
+            {
+                _tapesAmount = value;
+                _tapesAmount = Mathf.Clamp(value, Balance.instance.StartTapesAmount, 5);
+            }
+        }
+        private int _tapesAmount;
+
+        private int n = 0;
+
         private StateMachine mainStateMachine;
-        private TapesInteractor tapesInteractor;
+        private LevelInteractor levelInteractor;
+        private TapesHandler _tapesHandler;
 
         private void Start()
         {
-            tapeAmount = Balance.instance.StartTapesAmount;
-            tapesInteractor = Game.GetInteractor<TapesInteractor>();
+            tapesAmount = Balance.instance.StartTapesAmount;
+            levelInteractor = Game.GetInteractor<LevelInteractor>();
 
             mainStateMachine = C.main.MainStateMachine;
 
@@ -20,6 +36,12 @@ namespace Tapes
             {
                 mainStateMachine.onStateChanged += OnStateChanged;
             }
+            if(levelInteractor != null)
+            {
+                levelInteractor.levelChanged += OnLevelChanged;
+            }
+
+            _tapesHandler = new TapesHandler(this);
         }
 
         private void OnDisable()
@@ -28,30 +50,39 @@ namespace Tapes
             {
                 mainStateMachine.onStateChanged -= OnStateChanged;
             }
+            if(levelInteractor != null)
+            {
+                levelInteractor.levelChanged -= OnLevelChanged;
+            }
+        }
+
+        private void OnLevelChanged(int level)
+        {
+            if (level == 3)
+            {
+                SpawnTape();
+            }
         }
 
         private void SpawnTapes()
         {
-            int n = 0;
-            float height = Camera.main.orthographicSize;
-
-            for (int i = tapeAmount - 1; i > -1; i--)
+            _tapes = new List<TapeManager>();
+            for (int i = tapesAmount - 1; i > -1; i--)
             {
-                n++;
-
-                Tape t = TapeObjectsFactory.instance.Get<Tape>(transform);
-
-                t.name = n.ToString();
-
-                Vector2 pos = new(0, (height / tapeAmount + 0.6f) * i);
-                t.transform.position = pos;
-
-                Vector3 scale = t.transform.localScale;
-                scale = new Vector3(scale.x, scale.y - 0.1f * tapeAmount, scale.y);
-                t.transform.localScale = scale;
-
-                tapesInteractor.AddTapeToList(t.GetComponent<Tape>());
+                SpawnTape();
             }
+        }
+        private TapeManager SpawnTape()
+        {
+            TapeManager t = TapeObjectsFactory.instance.Get<TapeManager>(transform);
+            _tapes.Add(t);
+            
+            n++;
+            t.gameObject.name = n.ToString();
+
+            _tapesHandler.Subscribe(t);
+
+            return t;
         }
         private void OnStateChanged(IState state)
         {
@@ -59,14 +90,21 @@ namespace Tapes
             {
                 for(int i = 0; i < transform.childCount; i++)
                 {
+                    _tapesHandler?.Unsubscribe(tapes[i]);
                     Destroy(transform.GetChild(i).gameObject);
                 }
 
                 SpawnTapes();
             }
+            if(state == mainStateMachine.countState)
+            {
+                foreach(var tape in _tapes)
+                {
+                    tape.StopTape();
+                }
+            }
         }
     }
-
 }
 
 

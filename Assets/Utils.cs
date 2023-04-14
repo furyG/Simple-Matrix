@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 // This is actually OUTSIDE of the Utils Class
 public enum BoundsTest
@@ -44,6 +45,12 @@ public class Utils : MonoBehaviour
         b0.Encapsulate(b1.min);
         b0.Encapsulate(b1.max);
         return (b0);
+    }
+    public static IEnumerator InvokeRoutine(Action action, float inTime)
+    {
+        yield return new WaitForSeconds(inTime);
+
+        action();
     }
 
     public static Bounds CombineBoundsOfChildren(GameObject go)

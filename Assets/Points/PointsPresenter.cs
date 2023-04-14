@@ -23,7 +23,7 @@ public class PointsPresenter : MonoBehaviour
         if(pointsInteractor != null)
         {
             pointsInteractor.pointsChanged += OnPointsChangedEvent;
-            pointsInteractor.OnComboRecieved += OnComboRecievedEvent;
+            pointsInteractor.comboRecieved += OnComboRecievedEvent;
         }
 
         floatingPointsHandler = new FloatingPointsHandler(this, canvasTransform, pointsImage.transform.position);
@@ -34,10 +34,10 @@ public class PointsPresenter : MonoBehaviour
         if (pointsInteractor != null)
         {
             pointsInteractor.pointsChanged -= OnPointsChangedEvent;
-            pointsInteractor.OnComboRecieved -= OnComboRecievedEvent;
+            pointsInteractor.comboRecieved -= OnComboRecievedEvent;
         }
     }
-    private void OnComboRecievedEvent(List<Numberable> numsToAnimate)
+    private void OnComboRecievedEvent(List<Vector2> numsToAnimate)
     {
         foreach(var num in numsToAnimate)
         {

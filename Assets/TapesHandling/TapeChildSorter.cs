@@ -1,118 +1,88 @@
-//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-//using System.Linq;
-//using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-//public class TapeChildSorter
-//{
-//    //private Tape tape;
+public class TapeChildSorter
+{
+    private TapeContentSpawner _contentSpawner;
+    private TapeManager _manager;
+    private List<NumberManager> _nums;
 
-//    private Numberable lastNumber;
-//    private List<Numberable> childrenNums;
+    public TapeChildSorter(TapeManager manager, TapeContentSpawner contentSpawner)
+    {
+        _contentSpawner = contentSpawner;
+        _manager = manager;
+        
+        _nums = new List<NumberManager>();
+    }
+    private NumberManager GetClosestTo(float x)
+    {
+        NumberManager closest = _nums[0];
 
-//    //public TapeChildSorter(Tape tape)
-//    //{
-//    //    this.tape = tape;
+        foreach (var number in _nums)
+        {
+            float closestX = closest.transform.localPosition.x;
+            float onTapeNumberX = number.transform.localPosition.x;
 
-//    //    childrenNums  = new List<Numberable>();
-//    //}
+            if (Mathf.Abs(onTapeNumberX - x) < Mathf.Abs(closestX - x))
+            {
+                closest = number;
+            }
+        }
+        return closest;
+    }
+    private void ReplaceNumber(NumberManager closest, NumberManager lastNumber)
+    {
+        closest.SetNumberValues(lastNumber.number);
+        _manager.lastNumber = closest;
 
-//    public void SetNumber(Numberable lastNumber)
-//    {
-//        this.lastNumber = lastNumber;
+        UnityEngine.Object.Destroy(lastNumber.gameObject);
+    }
+    private List<NumberManager> AddNumberInList(NumberManager lastNumber)
+    {
+        lastNumber.SetNumberOnTape();
+        _nums.Add(lastNumber);
+        _nums = _nums.OrderBy(x => x.transform.localPosition.x).ToList();
 
-//        if (CheckForClosest(lastNumber) == null)
-//        {
-//            childrenNums.Add(lastNumber);
-//        }
+        return _nums;
+    }
+    private NumberManager GetZeroFromSpawner(Vector2 spawnPos)
+    {
+        return _contentSpawner.SpawnNumber(NumberType.zero, spawnPos);
+    }
+    public List<NumberManager> GetSortedChilds(NumberManager lastNumber)
+    {
+        float numWidth = lastNumber.GetComponent<RectTransform>().rect.width;
+        float buffer = numWidth / 2 + 60;
 
-//        SortChildren();
-//    }
-//    private Numberable CheckForClosest(Numberable lastNumber)
-//    {
-//        float buffer = lastNumber.transform.localScale.x / 2 + 0.1f;
+        if (_nums.Count >= 1)
+        {
+            NumberManager closest = GetClosestTo(lastNumber.transform.localPosition.x);
+            float delta = Mathf.Abs(closest.transform.localPosition.x - lastNumber.transform.localPosition.x);
+            if (delta < buffer)
+            {
+                ReplaceNumber(closest, lastNumber);
+                return _nums;
+            }
+        }
+        return AddNumberInList(lastNumber);
+    }
+    public List<NumberManager> CompareChildLists(List<NumberManager> targetList)
+    {
+        if (targetList.Count == _nums.Count) return _nums;
 
-//        Numberable closest = GetClosest(lastNumber);
-//        if (closest != null)
-//        {
-//            float closestX = closest.transform.localPosition.x;
+        for(int i = 0; i < targetList.Count; i++)
+        {
+            NumberManager num = _nums.FirstOrDefault(x => x.transform.localPosition.x == targetList[i].transform.localPosition.x);
+            if (!num)
+            {
+                AddNumberInList(GetZeroFromSpawner(targetList[i].transform.localPosition));
+            }
+        }
 
-//            float delta = Mathf.Abs(closestX - lastNumber.transform.localPosition.x);
-//            if (delta < buffer)
-//            {
-//                ChangeNumberOnPos(closest);
-//            }
-//            return closest;
-//        }
-//        return null;
-//    }
+        return _nums;
+    }
 
-//    private Numberable GetClosest(Numberable lastNumber)
-//    {
-//        if (childrenNums.Count < 1) return null;
-
-//        float numberX = lastNumber.transform.localPosition.x; 
-
-//        Numberable closest = childrenNums[0];
-
-//        foreach (var number in childrenNums)
-//        {
-//            if (number.Equals(lastNumber)) continue;
-
-//            float closestX = closest.transform.localPosition.x;
-//            float onTapeNumberX = number.transform.localPosition.x;
-
-//            if (Mathf.Abs(onTapeNumberX - numberX) < Mathf.Abs(closestX - numberX))
-//            {
-//                closest = number;
-//            }
-//        }
-//        return closest;
-//    }
-//    private void ChangeNumberOnPos(Numberable closest)
-//    {
-//        Vector2 newNumPos = new(closest.transform.localPosition.x, 0);
-//        closest.transform.localPosition = newNumPos;
-
-//        int closestIndex = childrenNums.IndexOf(closest);
-//        //tape.DestroyNumber(childrenNums[closestIndex]);
-//        childrenNums.RemoveAt(closestIndex);
-
-//        childrenNums.Insert(closestIndex, lastNumber);
-//        childrenNums.RemoveAt(closestIndex);
-
-//        //closest.Number = lastNumber.Number;
-//        //tape.DestroyNumber(lastNumber);
-//    }
-//    private void SortChildren() => childrenNums = childrenNums.OrderBy(x => x.transform.localPosition.x).ToList();
-
-//    //private Zero SpawnZero(float x)
-//    //{
-//    //    //Zero zero = TapeObjectsFactory.instance.Get<Zero>(//tape.transform);
-//    //    zero.transform.localPosition = new(x, 0);
-
-//    //    return zero;
-//    //    //zero.transform.SetSiblingIndex(childrenNums.IndexOf(childrenNums.FirstOrDefault(index => index.transform.localPosition.x == x)));
-//    //}
-
-//    private bool CanAddZero(float x)
-//    {
-//        int index = childrenNums.IndexOf(childrenNums.FirstOrDefault(index => index.transform.localPosition.x == x));
-
-//        if (childrenNums.Count <= index || index == -1) return true;
-
-//        return !childrenNums[index];
-//    }
-
-//    public void TryAddZero(float x)
-//    {
-//        if (CanAddZero(x))
-//        {
-//            Zero zero = SpawnZero(x);
-
-//            SetNumber(zero);
-//            SortChildren();
-//        }
-//    }
-//}
+}

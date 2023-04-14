@@ -12,13 +12,14 @@ public class LevelInteractor : Interactor
     private StartButton startButton;
 
     private LevelRepository repository;
+    private PointsInteractor pointsInteractor;
     
-
     public override void OnCreate()
     {
         repository = Game.GetRepository<LevelRepository>();
 
         buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
+        pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
     public override void Initialize()
     {
@@ -34,6 +35,11 @@ public class LevelInteractor : Interactor
         if (startButton != null)
         {
             startButton.buttonClicked += NewGame;
+        }
+
+        if (pointsInteractor!=null)
+        {
+            pointsInteractor.pointsForLevelUpCollected += NextLevel;
         }
     }
 

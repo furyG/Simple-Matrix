@@ -14,16 +14,26 @@ public class TimerInteractor : Interactor, IBonusReciever
     }
 
     public bool isPaused { get; private set; }
-    public float roundTime => repository.originRoundTime;
+    public float roundTime => repository.originLevelTime;
 
     private StateMachine mainStateMachine;
     private TimerRepository repository;
+    private PointsInteractor pointsInteractor;
 
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<TimerRepository>();    
         
         mainStateMachine = C.main.MainStateMachine;
+        pointsInteractor = Game.GetInteractor<PointsInteractor>();
+    }
+
+    public override void Initialize()
+    {
+        if (pointsInteractor != null)
+        {
+            pointsInteractor.pointsForLevelUpCollected += AddLevelUpTime;
+        }
     }
 
     public void SetTime(float seconds)
@@ -104,10 +114,18 @@ public class TimerInteractor : Interactor, IBonusReciever
             OnTimerValueChangedEvent?.Invoke(remainingSeconds);
         }
     }
+    public void AddTime(object sender, float amount)
+    {
+        remainingSeconds += amount;
+        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.instance.FirstLevelTime);
+    }
+    public void AddLevelUpTime()
+    {
+        AddTime(null, repository.levelUpIncrementTime);
+    }
 
     public void TakeBonus()
     {
-        remainingSeconds += Balance.instance.TimerBonusIncrementAmount;
-        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.instance.FirstRoundTime);
+        AddTime(null, repository.timerBonusIncrementAmount);
     }
 }

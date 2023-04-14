@@ -1,20 +1,46 @@
 using Architecture;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class LifesInteractor : Interactor, IBonusReciever
 {
     public event Action<int> lifesAmountChanged;
 
     public int lifes => repository.lifes;
-    public int maximumLifes => repository.maximumLifes;
 
     private LifesRepository repository;
+    private ButtonsInteractor buttonsInteractor;
+    private StartButton startButton;
+    private PointsInteractor pointsInteractor;
 
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<LifesRepository>();
+
+        pointsInteractor = Game.GetInteractor<PointsInteractor>();
+        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
+        startButton = buttonsInteractor.GetButton<StartButton>();
+
         lifesAmountChanged?.Invoke(lifes);
+    }
+    public override void Initialize()
+    {
+        if (startButton)
+        {
+            startButton.buttonClicked += ResetLifes;
+        }
+        if(pointsInteractor!= null)
+        {
+            pointsInteractor.comboRecieved += OnComboRecieved;
+        }
+    }
+    private void OnComboRecieved(List<Vector2> nums)
+    {
+        if(nums.Count > 4) 
+        {
+            AddLife(null, 1);
+        }
     }
     public void AddLife(object sender, int amount)
     {
@@ -31,6 +57,13 @@ public class LifesInteractor : Interactor, IBonusReciever
         lifesAmountChanged?.Invoke(lifes);
     }
     public bool IsEnoughLifes() => lifes >= 1;
+
+    public void ResetLifes()
+    {
+        repository.lifes = 0;
+
+        lifesAmountChanged?.Invoke(lifes);
+    }
 
     public void TakeBonus()
     {

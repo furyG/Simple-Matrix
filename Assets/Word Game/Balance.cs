@@ -10,6 +10,7 @@ public class Balance : MonoBehaviour, IBonusReciever
 
     [SerializeField] private float firstRoundTime;
     [SerializeField] private float timerBonusIncrementAmount;
+    [SerializeField] private float roundUpTimerIncrement;
 
     [SerializeField] private int firstRoundPointsCap;
     [SerializeField] private int incrementPointsCap;
@@ -30,8 +31,10 @@ public class Balance : MonoBehaviour, IBonusReciever
 
     private bool _slowed = false;
 
-    public float FirstRoundTime => firstRoundTime;
+    public float FirstLevelTime => firstRoundTime;
     public float TimerBonusIncrementAmount => timerBonusIncrementAmount;
+
+    public float LevelUpTimerIncrement => roundUpTimerIncrement;
 
     public int FirstRoundPointsCap => firstRoundPointsCap;
     public int IncrementPointsCap => incrementPointsCap;

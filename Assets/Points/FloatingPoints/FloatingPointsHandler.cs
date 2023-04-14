@@ -17,13 +17,13 @@ public class FloatingPointsHandler
 
         this.pointsFlyingTime = Balance.instance.PointsFlyingTime;
     }
-    public void InitFloatingPoints(Numberable num)
+    public void InitFloatingPoints(Vector2 startPos)
     {
         //Debug.Log("Spawning floating points on: " + num.Number);
         List<Vector2> fsPts;
         FloatingPoints fp;
-        Vector2 p0 = num.transform.position;
-        p0 = Camera.main.WorldToScreenPoint(p0);
+        Vector2 p0 = startPos;
+        //p0 = Camera.main.WorldToScreenPoint(p0);
         p0.x /= Screen.width;
         p0.y /= Screen.height;
 

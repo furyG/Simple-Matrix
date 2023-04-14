@@ -6,7 +6,8 @@ using UnityEngine;
 public class PointsInteractor : Interactor
 {
     public event Action pointsChanged;
-    public event Action<List<Numberable>> OnComboRecieved;
+    public event Action<List<Vector2>> comboRecieved;
+    public event Action pointsForLevelUpCollected;
 
     public int points => repository.points;
     public int maxPointsOnLvl => repository.pointsForNextLevel;
@@ -16,9 +17,6 @@ public class PointsInteractor : Interactor
 
     private ButtonsInteractor buttonsInteractor;
     private StartButton startButton;
-
-    private LifesInteractor lifesInteractor;
-
     private PointsRepository repository;
 
     public override void OnCreate()
@@ -26,7 +24,6 @@ public class PointsInteractor : Interactor
         this.repository = Game.GetRepository<PointsRepository>();
 
         buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
-        lifesInteractor = Game.GetInteractor<LifesInteractor>();
     }
     public override void Initialize()
     {
@@ -44,15 +41,15 @@ public class PointsInteractor : Interactor
 
     private void UpdateRoundPoints()
     {
-        this.repository.pointsForNextLevel += repository.pointsIncrement + points;
+        this.repository.pointsForNextLevel += repository.pointsIncrement + points/2;
         pointsChanged?.Invoke();
     }
 
     public bool IsEnoughPoints() => points >= maxPointsOnLvl;
 
-    public void RecieveCombo(List<Numberable> numsToAnimate)
+    public void RecieveCombo(List<Vector2> numsToAnimate)
     {
-        OnComboRecieved?.Invoke(numsToAnimate);
+        comboRecieved?.Invoke(numsToAnimate);
         AddPoints(null, numsToAnimate.Count * pointsForNumber);
     }
     public void AddPoints(object sender, int value)
@@ -62,7 +59,7 @@ public class PointsInteractor : Interactor
 
         if (IsEnoughPoints())
         {
-            lifesInteractor.AddLife(this, 1);
+            pointsForLevelUpCollected?.Invoke();
             UpdateRoundPoints();
         }
     }
