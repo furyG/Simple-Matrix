@@ -5,25 +5,33 @@ using UnityEngine;
 
 public class PlayState : IState
 {
-    private MainController main;
-    private Transform tapeAnchor;
-    //private TapeSpawner tSpawner;
+    private GameModeManager main;
+    private TapeSpawner _tapeSpawner;
+    private LevelInteractor _levelInteractor;
 
-    public PlayState(MainController main)
+    public PlayState(GameModeManager main)
     {
         this.main = main;
 
-        //CreateTapeAnchor();
-
+        this._tapeSpawner = main.tapeSpawner;
+        this._levelInteractor = Game.GetInteractor<LevelInteractor>();
     }
-    private void CreateTapeAnchor()
+    public void Enter(ButtonType fromButton)
     {
-        //tapeAnchor = new GameObject("TapeAnchor").transform;
-        //tSpawner = tapeAnchor.AddComponent<TapeSpawner>();
-    }
-    public void Enter()
-    {
-        //tSpawner.SpawnTapes(Balance.instance.StartTapesAmount);
+        switch(fromButton)
+        {
+            case ButtonType.Start:
+                _tapeSpawner.SpawnTapes();
+                _levelInteractor.NewGame();
+                Points.Reset();
+                Timer.StartRoundTimer();
+                break;
+            case ButtonType.Continue:
+                _levelInteractor.NewGame();
+                _tapeSpawner.SpawnTapes();
+                Lifes.RemoveLife(this, 1);
+                break;
+        }
     }
 
     public void Update()
@@ -31,11 +39,8 @@ public class PlayState : IState
 
     }
 
-    public void Exit()
+    public void Exit(ButtonType fromButton)
     {
-        //foreach (Tape t in TapeHandler.tapes)
-        //{
-        //    t.StopTape();
-        //}
+        _tapeSpawner.StopTapes();
     }
 }

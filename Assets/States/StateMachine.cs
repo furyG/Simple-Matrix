@@ -1,25 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
-using Unity.VisualScripting;
 
 [Serializable]
 public class StateMachine 
 {
+    public event Action <IState> onStateChanged;
     public IState CurrentState { get; private set; }
 
     public IdleState idleState;
     public PlayState playState;
-    public CountState countState;
-
-    public event Action <IState> onStateChanged;
+    public GameOverState gameOverState;
+    public MainMenuState mainMenuState;
 
     public void Initialize(IState state)
     {
         CurrentState = state;
         state.Enter();
+    }
+    public async void TransitionTo(IState nextState, ButtonType fromButton)
+    {
+        await Task.Yield();
+
+        CurrentState.Exit();
+        CurrentState = nextState;
+        nextState.Enter(fromButton);
+
+        onStateChanged?.Invoke(CurrentState);
+        Debug.Log("Transition to: "+nextState.ToString());
     }
     public void TransitionTo(IState nextState)
     {
@@ -28,7 +36,7 @@ public class StateMachine
         nextState.Enter();
 
         onStateChanged?.Invoke(CurrentState);
-        Debug.Log("Transition to: "+nextState.ToString());
+        Debug.Log("Transition to: " + nextState.ToString());
     }
     public void Update()
     {
@@ -37,11 +45,12 @@ public class StateMachine
             CurrentState.Update();
         }
     }
-    public StateMachine(MainController main)
+    public StateMachine(GameModeManager main)
     {
         this.idleState = new IdleState(main);
         this.playState = new PlayState(main);
-        this.countState = new CountState(main);
+        this.gameOverState = new GameOverState(main);
+        this.mainMenuState = new MainMenuState(main);
     }
 
 }

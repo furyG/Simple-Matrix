@@ -10,7 +10,7 @@ public class LifesRepository : Repository
     public override void Initialize()
     {
         lifes = 0;
-        maximumLifes = Balance.instance.MaximumLifes;
+        maximumLifes = Balance.GetInstance().MaximumLifes;
     }
 
     public override void Save()

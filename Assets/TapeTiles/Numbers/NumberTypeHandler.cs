@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
 {
+    public NumberType type => _type;
+    private NumberType _type;
+
     private int _number;
     private NumberManager _manager;
 
@@ -12,7 +15,7 @@ public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
         _manager= GetComponent<NumberManager>();
     }
 
-    public void SetType(NumberType type = NumberType.simple)
+    public NumberType SetType(NumberType type = NumberType.simple)
     {
         if(type != NumberType.zero)
         {
@@ -22,8 +25,11 @@ public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
                 type = NumberType.changing;
             }
         }
+        this._type = type;
 
         ChooseNumber(type);
+
+        return type;
     }
     private void ChooseNumber(NumberType type)
     {

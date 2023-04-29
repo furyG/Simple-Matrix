@@ -7,35 +7,16 @@ public class LevelInteractor : Interactor
 
     public int currentLevel => repository.level;
 
-    private ButtonsInteractor buttonsInteractor;
-    private ContinueButton continueButton;
-    private StartButton startButton;
-
     private LevelRepository repository;
     private PointsInteractor pointsInteractor;
     
     public override void OnCreate()
     {
         repository = Game.GetRepository<LevelRepository>();
-
-        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
-        pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
     public override void Initialize()
     {
         levelChanged?.Invoke(currentLevel);
-
-        continueButton = buttonsInteractor.GetButton<ContinueButton>();
-        startButton = buttonsInteractor.GetButton<StartButton>();
-
-        if (continueButton != null)
-        {
-            continueButton.buttonClicked += NextLevel;
-        }
-        if (startButton != null)
-        {
-            startButton.buttonClicked += NewGame;
-        }
 
         if (pointsInteractor!=null)
         {

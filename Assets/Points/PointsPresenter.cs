@@ -2,15 +2,15 @@ using Architecture;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PointsPresenter : MonoBehaviour
 {
     [SerializeField] private Image pointsImage;
-    [SerializeField] private Text pointsTxt;
+    [SerializeField] private TextMeshProUGUI pointsTxt;
     [SerializeField] private Transform canvasTransform;
-
 
     private Image activePointsFill;
     private PointsInteractor pointsInteractor;
@@ -51,7 +51,7 @@ public class PointsPresenter : MonoBehaviour
         if(pointsTxt != null && pointsImage != null)
         {
             pointsImage.fillAmount = (float)pointsInteractor.points / (float)pointsInteractor.maxPointsOnLvl;
-            pointsTxt.text = pointsInteractor.points.ToString() + " of " + pointsInteractor.maxPointsOnLvl.ToString();
+            pointsTxt.text = "счёт: " + pointsInteractor.points.ToString();
         }
     }
     private void OnPointsChangedEvent()

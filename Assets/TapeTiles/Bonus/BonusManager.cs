@@ -1,41 +1,32 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
 {
     private int lifeTime = 5;
-    private BonusType type = BonusType.time;
+    public BonusType type => _type;
+    private BonusType _type = BonusType.time;
 
-    private IRenderer _bonusRenderer;
+    //private IRenderer<Image> _bonusRenderer;
     private TapeManager _tapeManager;
     private BonusTakeHandler _bonusTakeHandler;
 
+
     private void Awake()
     {
-        _bonusRenderer = GetComponent<IRenderer>();
+        //_bonusRenderer = GetComponent<IRenderer<Image>>();
         _bonusTakeHandler = new BonusTakeHandler(this);
         _tapeManager = transform.parent.GetComponent<TapeManager>();
     }
 
     protected void Start()
     {
-        if(_tapeManager)
-        {
-            _tapeManager.OnChildSort += CheckForNearNumber;
-        }
-
         _bonusTakeHandler.InitializeHandler();
         SetType();
         SetStartPosition();
 
         Destroy(gameObject, lifeTime);
-    }
-    private void OnDestroy()
-    {
-        if(_tapeManager)
-        {
-            _tapeManager.OnChildSort -= CheckForNearNumber;
-        }
     }
 
     private void CheckForNearNumber(TapeManager t, List<NumberManager> nums)
@@ -54,7 +45,7 @@ public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
         Destroy(gameObject);
     }
 
-    public void SetStartPosition()
+    public void SetStartPosition(Vector2 spawnPos = default)
     {
         float xPos = Random.Range(-0.4f, 0.4f);
         if (transform.parent.childCount > 0)
@@ -64,7 +55,7 @@ public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
         }
         transform.localPosition = new(xPos, 0, 0);
     }
-    public void SetType(BonusType type = default)
+    public BonusType SetType(BonusType type = default)
     {
         if(type == default)
         {
@@ -78,9 +69,10 @@ public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
         }
         else
         {
-            this.type = type;
+            this._type = type;
         }
+        return type;
 
-        _bonusRenderer.ChangeSprite((int)type);
+        //_bonusRenderer.ChangeSprite((int)type);
     }
 }

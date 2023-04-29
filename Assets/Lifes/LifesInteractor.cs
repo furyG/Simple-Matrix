@@ -10,8 +10,6 @@ public class LifesInteractor : Interactor, IBonusReciever
     public int lifes => repository.lifes;
 
     private LifesRepository repository;
-    private ButtonsInteractor buttonsInteractor;
-    private StartButton startButton;
     private PointsInteractor pointsInteractor;
 
     public override void OnCreate()
@@ -19,17 +17,12 @@ public class LifesInteractor : Interactor, IBonusReciever
         this.repository = Game.GetRepository<LifesRepository>();
 
         pointsInteractor = Game.GetInteractor<PointsInteractor>();
-        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
-        startButton = buttonsInteractor.GetButton<StartButton>();
 
         lifesAmountChanged?.Invoke(lifes);
+        Lifes.Initialize(this);
     }
     public override void Initialize()
     {
-        if (startButton)
-        {
-            startButton.buttonClicked += ResetLifes;
-        }
         if(pointsInteractor!= null)
         {
             pointsInteractor.comboRecieved += OnComboRecieved;

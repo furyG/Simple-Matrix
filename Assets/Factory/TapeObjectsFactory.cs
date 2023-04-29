@@ -1,15 +1,13 @@
 using System.Linq;
 using UnityEngine;
 
-public class TapeObjectsFactory : MonoBehaviour, IFactory
+public class TapeObjectsFactory : Singleton<TapeObjectsFactory>, IFactory
 {
-    public static TapeObjectsFactory instance;
-
     private Item[] items;
 
-    private void Awake()
+    public override void Awake()
     {
-        instance = this;
+        base.Awake();
 
         items = Resources.LoadAll<Item>("Items");
     }

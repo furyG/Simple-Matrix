@@ -70,7 +70,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 154f30809bccaa14a93740bd3985787b, type: 3}
   m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -160,3 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee681cdbfaea64449ac4eb31342c57f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tilesOnTape: 6
+  _poolCount: 1
+  _autoExpand: 0
+  _numberPrefab: {fileID: 0}

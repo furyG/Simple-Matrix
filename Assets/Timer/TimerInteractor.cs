@@ -16,7 +16,6 @@ public class TimerInteractor : Interactor, IBonusReciever
     public bool isPaused { get; private set; }
     public float roundTime => repository.originLevelTime;
 
-    private StateMachine mainStateMachine;
     private TimerRepository repository;
     private PointsInteractor pointsInteractor;
 
@@ -24,8 +23,8 @@ public class TimerInteractor : Interactor, IBonusReciever
     {
         this.repository = Game.GetRepository<TimerRepository>();    
         
-        mainStateMachine = C.main.MainStateMachine;
         pointsInteractor = Game.GetInteractor<PointsInteractor>();
+        Timer.Initialize(this);
     }
 
     public override void Initialize()
@@ -60,11 +59,8 @@ public class TimerInteractor : Interactor, IBonusReciever
     }
     public void StartRoundTimer()
     {
-        if(remainingSeconds <= 0)
-        {
-            SetTime(roundTime);
-            Start();
-        }
+        SetTime(roundTime);
+        Start();
     }
     public void Pause()
     {
@@ -81,12 +77,10 @@ public class TimerInteractor : Interactor, IBonusReciever
     public void Stop()
     {
         Unsubscribe();
-        remainingSeconds = 0;
+        //remainingSeconds = 0;
 
         OnTimerValueChangedEvent?.Invoke(remainingSeconds);
         OnTimerFinishedEvent?.Invoke();
-
-        mainStateMachine.TransitionTo(mainStateMachine.countState);
     }
     private void Subscribe()
     {
@@ -108,18 +102,19 @@ public class TimerInteractor : Interactor, IBonusReciever
         if(remainingSeconds <= 0)
         {
             Stop();
+            GameModeManager.GetInstance().GameOver();
         }
         else
         {
             OnTimerValueChangedEvent?.Invoke(remainingSeconds);
         }
     }
-    public void AddTime(object sender, float amount)
+    private void AddTime(object sender, float amount)
     {
         remainingSeconds += amount;
-        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.instance.FirstLevelTime);
+        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.GetInstance().FirstLevelTime);
     }
-    public void AddLevelUpTime()
+    private void AddLevelUpTime()
     {
         AddTime(null, repository.levelUpIncrementTime);
     }

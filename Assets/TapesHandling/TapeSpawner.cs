@@ -6,50 +6,41 @@ namespace Tapes
 {
     public class TapeSpawner : MonoBehaviour
     {
-        public List<TapeManager> tapes => _tapes;
         private List<TapeManager> _tapes;
+
+        private List<List<TileNeighbour>> _tilesMatrix;
+
         private int tapesAmount
         {
             get => _tapesAmount;
             set
             {
                 _tapesAmount = value;
-                _tapesAmount = Mathf.Clamp(value, Balance.instance.StartTapesAmount, 5);
+                _tapesAmount = Mathf.Clamp(value, Balance.GetInstance().StartTapesAmount, 5);
             }
         }
         private int _tapesAmount;
+        
 
         private int n = 0;
-
-        private StateMachine mainStateMachine;
         private LevelInteractor levelInteractor;
-        private TapesHandler _tapesHandler;
+
+        private void Awake()
+        {
+            tapesAmount = Balance.GetInstance().StartTapesAmount;
+            levelInteractor = Game.GetInteractor<LevelInteractor>();
+        }
 
         private void Start()
         {
-            tapesAmount = Balance.instance.StartTapesAmount;
-            levelInteractor = Game.GetInteractor<LevelInteractor>();
-
-            mainStateMachine = C.main.MainStateMachine;
-
-            if(mainStateMachine != null)
-            {
-                mainStateMachine.onStateChanged += OnStateChanged;
-            }
             if(levelInteractor != null)
             {
                 levelInteractor.levelChanged += OnLevelChanged;
             }
-
-            _tapesHandler = new TapesHandler(this);
         }
 
         private void OnDisable()
         {
-            if(mainStateMachine != null)
-            {
-                mainStateMachine.onStateChanged -= OnStateChanged;
-            }
             if(levelInteractor != null)
             {
                 levelInteractor.levelChanged -= OnLevelChanged;
@@ -61,48 +52,57 @@ namespace Tapes
             if (level == 3)
             {
                 SpawnTape();
+                InitializeTileNeighbours();
             }
         }
 
-        private void SpawnTapes()
+        private TapeManager SpawnTape()
         {
+            TapeManager t = TapeObjectsFactory.GetInstance().Get<TapeManager>(transform);
+            _tilesMatrix.Add(t.GetComponent<TapeContentSpawner>().SpawnTiles());
+            _tapes.Add(t);
+
+            n++;
+            t.gameObject.name = n.ToString();
+
+            return t;
+        }
+        private void ClearTapes()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+        private void InitializeTileNeighbours()
+        {
+            for(int y = 0; y < _tilesMatrix.Count; y++)
+            {
+                for(int x = 0; x < _tilesMatrix[y].Count; x++)
+                {
+                    _tilesMatrix[y][x].InitializeTileNeighbour(x, y, _tilesMatrix);
+                }
+            }
+        }
+        public void StopTapes()
+        {
+            foreach (var tape in _tapes)
+            {
+                tape.StopTape();
+            }
+        }
+        public void SpawnTapes()
+        {
+            ClearTapes();
+
+            _tilesMatrix = new List<List<TileNeighbour>>();
             _tapes = new List<TapeManager>();
             for (int i = tapesAmount - 1; i > -1; i--)
             {
                 SpawnTape();
             }
-        }
-        private TapeManager SpawnTape()
-        {
-            TapeManager t = TapeObjectsFactory.instance.Get<TapeManager>(transform);
-            _tapes.Add(t);
-            
-            n++;
-            t.gameObject.name = n.ToString();
 
-            _tapesHandler.Subscribe(t);
-
-            return t;
-        }
-        private void OnStateChanged(IState state)
-        {
-            if(state == mainStateMachine.playState)
-            {
-                for(int i = 0; i < transform.childCount; i++)
-                {
-                    _tapesHandler?.Unsubscribe(tapes[i]);
-                    Destroy(transform.GetChild(i).gameObject);
-                }
-
-                SpawnTapes();
-            }
-            if(state == mainStateMachine.countState)
-            {
-                foreach(var tape in _tapes)
-                {
-                    tape.StopTape();
-                }
-            }
+            InitializeTileNeighbours();
         }
     }
 }

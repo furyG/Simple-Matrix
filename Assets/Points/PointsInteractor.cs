@@ -11,32 +11,20 @@ public class PointsInteractor : Interactor
 
     public int points => repository.points;
     public int maxPointsOnLvl => repository.pointsForNextLevel;
-    public int combo => repository.combo;
 
     private int pointsForNumber;
-
-    private ButtonsInteractor buttonsInteractor;
-    private StartButton startButton;
     private PointsRepository repository;
 
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<PointsRepository>();
-
-        buttonsInteractor = Game.GetInteractor<ButtonsInteractor>();
+        Points.Initialize(this);
     }
     public override void Initialize()
     {
         pointsChanged?.Invoke();
 
-        startButton = buttonsInteractor.GetButton<StartButton>();
-
-        if(startButton != null)
-        {
-            startButton.buttonClicked += Reset;
-        }
-
-        pointsForNumber = Balance.instance.PointsForNumber;
+        pointsForNumber = Balance.GetInstance().PointsForNumber;
     }
 
     private void UpdateRoundPoints()
@@ -70,7 +58,7 @@ public class PointsInteractor : Interactor
     }
     public void Reset()
     {
-        this.repository.OnCreate();
+        this.repository.points = 0;
         pointsChanged?.Invoke();
     }
 }

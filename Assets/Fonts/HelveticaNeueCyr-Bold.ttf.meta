@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 7ad8d22cb90f5ee4a8d2c17e208da539
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - HelveticaNeueCyr
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d7f39f59ee756d24ca43900a3fb53074, type: 3}
+  - {fileID: 12800000, guid: 47284f8a5595f004eba0d9e1d8adf12b, type: 3}
+  - {fileID: 12800000, guid: 1900bdafe086d2b4d8cad5182c18f9b3, type: 3}
+  - {fileID: 12800000, guid: abfd843eff323fd48a3cadaff28df39d, type: 3}
+  - {fileID: 12800000, guid: 1c012c75370a04247847cd9718390ae3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

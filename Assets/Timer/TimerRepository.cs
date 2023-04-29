@@ -14,9 +14,9 @@ public class TimerRepository : Repository
 
     public override void Initialize()
     {
-        originLevelTime = Balance.instance.FirstLevelTime;
-        levelUpIncrementTime = Balance.instance.LevelUpTimerIncrement;
-        timerBonusIncrementAmount = Balance.instance.TimerBonusIncrementAmount;
+        originLevelTime = Balance.GetInstance().FirstLevelTime;
+        levelUpIncrementTime = Balance.GetInstance().LevelUpTimerIncrement;
+        timerBonusIncrementAmount = Balance.GetInstance().TimerBonusIncrementAmount;
     }
 
     public override void Save()

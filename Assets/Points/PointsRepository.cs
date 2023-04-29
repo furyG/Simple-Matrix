@@ -10,15 +10,12 @@ namespace Architecture
         public int pointsForNextLevel { get; set; }
         public int pointsIncrement { get; private set; }
 
-        public int combo { get; set; }
-
         public override void OnCreate()
         {
             points = 0;
-            combo = 1;
 
-            pointsForNextLevel = Balance.instance.FirstRoundPointsCap;
-            pointsIncrement = Balance.instance.IncrementPointsCap;
+            pointsForNextLevel = Balance.GetInstance().FirstRoundPointsCap;
+            pointsIncrement = Balance.GetInstance().IncrementPointsCap;
         }
 
         public override void Initialize()

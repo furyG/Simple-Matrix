@@ -2,10 +2,22 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public abstract class Clickable : MonoBehaviour 
+public enum ButtonType
 {
-    public event Action buttonClicked;
+    None,
+    Start,
+    Continue,
+    Pause,
+    MainMenu,
+    Leaderboard,
+    Credits,
+    GameOver
+}
+
+[RequireComponent(typeof(Button))]
+public abstract class Clickable : MonoBehaviour
+{
+    protected abstract ButtonType type { get; }
 
     protected Button buttonComponent;
 
@@ -15,8 +27,5 @@ public abstract class Clickable : MonoBehaviour
         buttonComponent.onClick.AddListener(OnClick);
     }
 
-    protected virtual void OnClick()
-    {
-        buttonClicked?.Invoke();
-    }
+    protected abstract void OnClick();
 }

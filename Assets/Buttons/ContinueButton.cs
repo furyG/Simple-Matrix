@@ -1,27 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Architecture;
 
 public class ContinueButton : Clickable
 {
-    private LifesInteractor lifesInteractor;
-
-    protected void Start()
-    {
-        lifesInteractor = Game.GetInteractor<LifesInteractor>();
-    }
+    protected override ButtonType type => ButtonType.Continue;
 
     private void OnEnable()
     {
-        if(lifesInteractor != null)
+        if (Lifes.isInitialized)
         {
-            buttonComponent.interactable = lifesInteractor.IsEnoughLifes();
+            buttonComponent.interactable = Lifes.IsEnoughLifes();
         }
     }
     protected override void OnClick()
     {
-        base.OnClick();
-        lifesInteractor.RemoveLife(this, 1);
+        GameModeManager.GetInstance().ContinueGame(type);
     }
 }

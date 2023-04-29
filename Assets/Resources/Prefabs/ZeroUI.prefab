@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8897392439219196685}
   - component: {fileID: 4376140185207362008}
   - component: {fileID: 4489825360296873183}
-  - component: {fileID: 7905339216717902429}
   m_Layer: 5
   m_Name: ZeroUI
   m_TagString: Untagged
@@ -77,15 +76,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7905339216717902429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997802579271253856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c588430fd2f57247921f0c84f2c9e3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

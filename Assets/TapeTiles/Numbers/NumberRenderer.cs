@@ -1,11 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumberRenderer : MonoBehaviour, IRenderer
+public class NumberRenderer : MonoBehaviour, IRenderer<TextMeshProUGUI>
 {
-    public Image image => GetComponent<Image>();
-
-    private Sprite[] numsSprites;
+    [SerializeField] private BaseColors colors;
+    public TextMeshProUGUI visualizer => GetComponent<TextMeshProUGUI>();
 
     private void Awake()
     {
@@ -13,20 +13,35 @@ public class NumberRenderer : MonoBehaviour, IRenderer
     }
     public void ChangeColor(Color color)
     {
-        image.color = color;
+        visualizer.color = color;
     }
 
     public void ChangeSprite(Sprite sprite)
     {
-        image.sprite = sprite;
+        
     }
     public void ChangeSprite(int number)
     {
-        ChangeSprite(numsSprites[number]);
+        visualizer.text = number.ToString();
     }
 
     public void InitializeSprites()
     {
-        numsSprites = Resources.LoadAll<Sprite>("Sprites/numbers");
+        
+    }
+    public void ChangeColorByType(NumberType type)
+    {
+        switch(type)
+        {
+            case NumberType.simple:
+                ChangeColor(colors.orange);
+                break;
+            case NumberType.changing:
+                ChangeColor(colors.black);
+                break;
+            default: 
+                ChangeColor(colors.black);
+                break;
+        }
     }
 }

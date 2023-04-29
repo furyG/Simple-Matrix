@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class IdleState : IState
 {
-    private MainController main;
-    public IdleState(MainController main)
+    private GameModeManager main;
+    public IdleState(GameModeManager main)
     {
         this.main = main;
     }

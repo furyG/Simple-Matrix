@@ -1,64 +1,90 @@
 using Architecture;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TapeContentSpawner : MonoBehaviour
 {
+    public NumberManager lastSpawnedNumber { get; set; }
+    public List<TileNeighbour> tilesNeighbours { get; private set; }
+
+    [SerializeField] private int _tilesOnTape = 6;
+    [SerializeField] private int _poolCount = 1;
+    [SerializeField] private bool _autoExpand = false;
+
     private float _bonusSpawnChance;
     private float _spawnNumberTime;
-    private float _numberRunDuration;
 
+    private PoolMono<NumberManager> _pool;
     private Balance _balance;
-    private TapeManager _manager;
-    private NumberManager _lastSpawnedNumber;
-    private TimerInteractor _timerInteractor;
+
+    private const int tileThreshold = 119;
 
     private void Awake()
     {
-        _balance = Balance.instance;
-        _manager = GetComponent<TapeManager>();
-        _timerInteractor = Game.GetInteractor<TimerInteractor>();
+        _balance = Balance.GetInstance();
 
         _bonusSpawnChance = _balance.BonusSpawnChance;
         _spawnNumberTime = _balance.SpawnNumbersTime;
-        _numberRunDuration = _balance.NumberRunDuration;
     }
-    private void Start() => InvokeSpawnContent();
+
+    private void Start()
+    {
+        this._pool = new PoolMono<NumberManager>(_poolCount, transform);
+        this._pool.autoExpand = _autoExpand;
+
+        InvokeSpawnContent();
+    }
     private void SpawnContent()
     {
-        _timerInteractor.StartRoundTimer();
+        CreateNumber();
 
-        SpawnNumber();
-
-        float chance = Random.Range(0f, 1f);
-        if (chance < _bonusSpawnChance)
+        //float chance = Random.Range(0f, 1f);
+        //if (chance < _bonusSpawnChance)
+        //{
+        //    TapeObjectsFactory.instance.Get<BonusManager>(transform);
+        //}
+    }
+    private void CreateNumber()
+    {
+        if (lastSpawnedNumber)
         {
-            TapeObjectsFactory.instance.Get<BonusManager>(transform);
+            lastSpawnedNumber.GetComponent<IMoveable<NumberType>>().OnMovingEnd -= InvokeSpawnContent;
         }
+        lastSpawnedNumber = _pool.GetFreeElement();
+        lastSpawnedNumber.InitializeNumber();
+
+        lastSpawnedNumber.GetComponent<IMoveable<NumberType>>().OnMovingEnd += InvokeSpawnContent;
+    }
+
+    private Tile SpawnTile(int xPosition)
+    {
+        Tile t = TapeObjectsFactory.GetInstance().Get<Tile>(transform);
+        t.transform.localPosition = new(xPosition, 0);
+
+        return t;
     }
     public void InvokeSpawnContent()
     {
-        if (!this.isActiveAndEnabled) return;
+        if (!isActiveAndEnabled) return;
 
         StartCoroutine(Utils.InvokeRoutine(SpawnContent, _spawnNumberTime));
     }
-    public NumberManager SpawnNumber(NumberType type = NumberType.simple, Vector2 spawnPos = default)
+    public List<TileNeighbour> SpawnTiles()
     {
-        _lastSpawnedNumber = TapeObjectsFactory.instance.Get<NumberManager>(transform);
-        _lastSpawnedNumber.InvokeNumber(spawnPos, type);
-
-        if(type != NumberType.zero)
+        tilesNeighbours = new List<TileNeighbour>();
+        for(int i = -_tilesOnTape/2; i < _tilesOnTape/2; i++)
         {
-            _manager.lastNumber = _lastSpawnedNumber;
-            _lastSpawnedNumber.GetComponent<IMoveable<NumberType>>().OnMovingEnd += InvokeSpawnContent;
-        }
+            Tile t = SpawnTile(tileThreshold * i + (tileThreshold / 2));
+            t.name = (i + _tilesOnTape / 2).ToString();
 
-        return _lastSpawnedNumber;
+            tilesNeighbours.Add(t.tileNeigbour);
+        }
+        return tilesNeighbours;
     }
     public void CancelContentSpawning()
     {
         StopAllCoroutines();
-        if (_lastSpawnedNumber) Destroy(_lastSpawnedNumber.gameObject);
+        if (lastSpawnedNumber) Destroy(lastSpawnedNumber.gameObject);
     }
-    
 }

@@ -17,7 +17,6 @@ public class SceneZeroConfig : SceneConfig
         this.CreateInteractor<PointsInteractor>(interactorsMap);
         this.CreateInteractor<TimerInteractor>(interactorsMap);
         this.CreateInteractor<LevelInteractor>(interactorsMap);
-        this.CreateInteractor<ButtonsInteractor>(interactorsMap);
         this.CreateInteractor<LifesInteractor>(interactorsMap);
 
         return interactorsMap;

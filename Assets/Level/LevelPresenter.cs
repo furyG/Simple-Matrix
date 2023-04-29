@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Architecture;
+using TMPro;
 
 public class LevelPresenter : MonoBehaviour
 {
-    [SerializeField] private Text lvlTxt;
+    [SerializeField] private TextMeshProUGUI lvlTxt;
 
     private LevelInteractor levelInteractor;
 
@@ -27,7 +28,7 @@ public class LevelPresenter : MonoBehaviour
 
         if(lvlTxt != null && currentLevel != 0)
         {
-            lvlTxt.text = "Level: " + currentLevel;
+            lvlTxt.text = "ур: " + currentLevel;
         }
     }
 

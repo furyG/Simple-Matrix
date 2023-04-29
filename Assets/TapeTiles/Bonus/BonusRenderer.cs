@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BonusRenderer : MonoBehaviour, IRenderer
+public class BonusRenderer : MonoBehaviour, IRenderer<Image>
 {
-    public Image image => GetComponent<Image>();
+    public Image visualizer => GetComponent<Image>();
+
+    public Color32 GAME_BLACK => throw new System.NotImplementedException();
+
+    public Color32 GAME_RED => throw new System.NotImplementedException();
+
+    public BaseColors colors { get; set; }
 
     private Sprite[] _bonusSprites;
 
@@ -16,17 +22,17 @@ public class BonusRenderer : MonoBehaviour, IRenderer
 
     public void ChangeColor(Color color)
     {
-        image.color = color;
+        visualizer.color = color;
     }
 
     public void ChangeSprite(Sprite sprite)
     {
-        image.sprite = sprite;
+        visualizer.sprite = sprite;
     }
 
     public void ChangeSprite(int numberInArray)
     {
-        image.sprite = _bonusSprites[numberInArray];
+        visualizer.sprite = _bonusSprites[numberInArray];
     }
 
     public void InitializeSprites()

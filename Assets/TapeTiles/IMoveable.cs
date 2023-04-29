@@ -9,7 +9,7 @@ public interface IMoveable<T> where T : Enum
     float runDuration { get; set; }
     float slowRunDuration { get; }
     float defaultRunDuration { get; }
-    void InvokeMoving(Vector2 startPos);
+    void StartMove();
     void EndMove();
 
     bool CheckForSlow();

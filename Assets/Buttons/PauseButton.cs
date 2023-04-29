@@ -5,13 +5,10 @@ using UnityEngine;
 
 public class PauseButton : Clickable
 {
-    private bool paused = true;
+    protected override ButtonType type => ButtonType.Pause;
 
     protected override void OnClick()
     {
-        base.OnClick();
-
-        paused = !paused;
-        Time.timeScale = Convert.ToInt32(paused);
+        Time.timeScale = Time.timeScale <= 0 ? 1 : 0;
     }
 }

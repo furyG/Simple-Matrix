@@ -20,5 +20,6 @@ public enum BonusType
 
 public interface ITypeChangable<T> where T : System.Enum
 {
-    void SetType(T t);
+    T type { get; }
+    T SetType(T t = default);
 }

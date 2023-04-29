@@ -1,10 +1,8 @@
 using System;
 using UnityEngine;
 
-public class Balance : MonoBehaviour, IBonusReciever
+public class Balance : Singleton<Balance>, IBonusReciever
 {
-    public static Balance instance;
-
     public event Action slowBonusTaken;
     public event Action slowBonusDurationEnd;
 
@@ -22,6 +20,9 @@ public class Balance : MonoBehaviour, IBonusReciever
     [SerializeField] private int startTapesAmount;
     [SerializeField] private float bonusSpawnChance;
     [SerializeField] private int pointsForNumber;
+
+    [SerializeField] private int tilesOnTape;
+    [SerializeField] private int tapeActiveZoneDistance;
 
     [SerializeField] private float pointsFlyingTime;
     [SerializeField] private int maximumLifes;
@@ -46,16 +47,12 @@ public class Balance : MonoBehaviour, IBonusReciever
 
     public int StartTapesAmount => startTapesAmount;
     public float BonusSpawnChance => bonusSpawnChance;
+    public int TileOnTape => tilesOnTape;
+    public int TapeActiveZoneDistance => tapeActiveZoneDistance;
     public int PointsForNumber => pointsForNumber;
     public float PointsFlyingTime => pointsFlyingTime;
 
     public int MaximumLifes => maximumLifes;    
-
-    private void Awake()
-    {
-        instance = this;
-    }
-
     public void TakeBonus()
     {
         slowBonusTaken?.Invoke();

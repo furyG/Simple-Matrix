@@ -2,15 +2,29 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TapeClickHandler : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public class TapeClickHandler : Subject
 {
     public event Action OnTapeClicked;
 
+    private TapeManager _manager;
     private Button _button;
 
     private void Awake()
     {
         _button = GetComponent<Button>();
+        
+        _manager = GetComponent<TapeManager>();
+    }
+    private void OnEnable()
+    {
+        if (_manager)
+            Attach(_manager);
+    }
+    private void OnDisable()
+    {
+        if (_manager)
+            Detach(_manager);
     }
     private void Start()
     {
@@ -18,7 +32,7 @@ public class TapeClickHandler : MonoBehaviour
     }
     private void OnTapeClick()
     {
-        OnTapeClicked?.Invoke();
+        NotifyObeservers();
     }
 }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public interface IRenderer
+public interface IRenderer<T> where T : Component
 {
-    Image image { get; }
+    T visualizer { get; }
     void InitializeSprites();
     void ChangeColor(Color color);
     void ChangeSprite(Sprite sprite);

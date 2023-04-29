@@ -15,7 +15,7 @@ public class FloatingPointsHandler
         this.canvasTransform = canvasTransform;
         this.flyingEndPosition = flyingEndPosition;
 
-        this.pointsFlyingTime = Balance.instance.PointsFlyingTime;
+        this.pointsFlyingTime = Balance.GetInstance().PointsFlyingTime;
     }
     public void InitFloatingPoints(Vector2 startPos)
     {
@@ -41,7 +41,7 @@ public class FloatingPointsHandler
     }
     private FloatingPoints CreateFloatingPoints(int amt, List<Vector2> pts)
     {
-        FloatingPoints fp = TapeObjectsFactory.instance.Get<FloatingPoints>(canvasTransform);
+        FloatingPoints fp = TapeObjectsFactory.GetInstance().Get<FloatingPoints>(canvasTransform);
         fp.points = amt;
         fp.reportFinishTo = pointsPresenter;
         fp.Init(pts, 0, pointsFlyingTime);
