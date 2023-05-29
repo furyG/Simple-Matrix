@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 public class TapeClickHandler : Subject
 {
-    public event Action OnTapeClicked;
-
     private TapeManager _manager;
     private Button _button;
 
@@ -18,12 +15,12 @@ public class TapeClickHandler : Subject
     }
     private void OnEnable()
     {
-        if (_manager)
+        if (_manager != null)
             Attach(_manager);
     }
     private void OnDisable()
     {
-        if (_manager)
+        if (_manager != null)
             Detach(_manager);
     }
     private void Start()

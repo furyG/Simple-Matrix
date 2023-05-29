@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI Text Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI Text
+  m_TableCollectionNameGuidString: 4ea2e3ae2b459e94ca13806a909952bb
+  m_Entries:
+  - m_Id: 1322593988608
+    m_Key: play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2815128678400
+    m_Key: rules
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2858770411520
+    m_Key: leaderboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2935161270272
+    m_Key: credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2975112015872
+    m_Key: language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3811619811328
+    m_Key: saveScore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10325575249920
+    m_Key: sec
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3530334800883712
+    m_Key: gameOver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3530481479888896
+    m_Key: pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5311378533298176
+    m_Key: gameName
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6005704364472926232
+  references:
+    version: 2
+    RefIds:
+    - rid: 6005704364472926232
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1684071062632

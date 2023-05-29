@@ -5,61 +5,59 @@ using UnityEngine;
 
 public class LifesInteractor : Interactor, IBonusReciever
 {
-    public event Action<int> lifesAmountChanged;
+    public event Action<float> heartScoreChanged;
+    public event Action<List<Vector2>> comboRecieved;
 
-    public int lifes => repository.lifes;
+    public float heartScore => repository.heartsScore;
 
+    private PointsInteractor _pointsInteractor;
     private LifesRepository repository;
-    private PointsInteractor pointsInteractor;
 
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<LifesRepository>();
-
-        pointsInteractor = Game.GetInteractor<PointsInteractor>();
-
-        lifesAmountChanged?.Invoke(lifes);
-        Lifes.Initialize(this);
+        _pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
-    public override void Initialize()
+    public override void OnStart()
     {
-        if(pointsInteractor!= null)
+        repository.heartsScore = repository.startHeartScoreAmount;
+        heartScoreChanged?.Invoke(heartScore);
+
+        if(_pointsInteractor != null)
         {
-            pointsInteractor.comboRecieved += OnComboRecieved;
+            _pointsInteractor.comboRecieved += OnComboRecieved;
         }
     }
-    private void OnComboRecieved(List<Vector2> nums)
+    public void AddHeartScore(object sender, float amount)
     {
-        if(nums.Count > 4) 
-        {
-            AddLife(null, 1);
-        }
-    }
-    public void AddLife(object sender, int amount)
-    {
-        repository.lifes += amount;
-        repository.lifes = Math.Clamp(repository.lifes, 0, repository.maximumLifes);
+        repository.heartsScore += amount;
+        repository.heartsScore = Mathf.Clamp(repository.heartsScore, 0, repository.maxHeartScore);
 
-        lifesAmountChanged?.Invoke(lifes);
+        heartScoreChanged?.Invoke(heartScore);
     }
-    public void RemoveLife(object sender, int amount)
+    public void RemoveHeartScore(object sender, float amount)
     {
-        repository.lifes -= amount;
-        repository.lifes = Math.Clamp(repository.lifes, 0, repository.maximumLifes);
+        repository.heartsScore -= amount;
+        repository.heartsScore = Mathf.Clamp(repository.heartsScore, 0, repository.maxHeartScore);
 
-        lifesAmountChanged?.Invoke(lifes);
+        heartScoreChanged?.Invoke(heartScore);
     }
-    public bool IsEnoughLifes() => lifes >= 1;
+    public bool IsEnoughLifes() => heartScore >= 1;
 
     public void ResetLifes()
     {
-        repository.lifes = 0;
+        repository.heartsScore = repository.startHeartScoreAmount;
 
-        lifesAmountChanged?.Invoke(lifes);
+        heartScoreChanged?.Invoke(heartScore);
     }
 
     public void TakeBonus()
     {
-        AddLife(null, 1);
+        AddHeartScore(null, 1);
+    }
+    private void OnComboRecieved(List<Vector2> nums)
+    {
+        AddHeartScore(null, nums.Count * repository.heartPointsForOnePoint);
+        comboRecieved?.Invoke(nums);
     }
 }

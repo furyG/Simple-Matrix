@@ -1,5 +1,4 @@
 using Architecture;
-using System.Collections;
 using Tapes;
 using UnityEngine;
 
@@ -8,7 +7,11 @@ public class GameModeManager : Singleton<GameModeManager>
     public TapeSpawner tapeSpawner => _tapeSpawner;
     [SerializeField] private TapeSpawner _tapeSpawner;
 
-    public StateMachine MainStateMachine => mainStateMachine;
+    public PlayerManager playerManager => _playerManager;
+    private PlayerManager _playerManager;
+
+    public GameUISwitcher UISwitcher => _UISwitcher;
+    [SerializeField] private GameUISwitcher _UISwitcher;
 
     private StateMachine mainStateMachine;
 
@@ -18,8 +21,16 @@ public class GameModeManager : Singleton<GameModeManager>
 
         Game.Run();
 
+        _playerManager = GetComponent<PlayerManager>();
         mainStateMachine = new StateMachine(this);
-        mainStateMachine.Initialize(mainStateMachine.mainMenuState);    
+    }
+
+    private void Start()
+    {
+        mainStateMachine.Initialize(mainStateMachine.mainMenuState);
+
+        ToMainMenu();
+        StartCoroutine(UISwitcher.SwitchCanvasRoutine(CanvasType.mainMenu));
     }
 
     public void StartNewGame(ButtonType fromButton)
@@ -34,13 +45,14 @@ public class GameModeManager : Singleton<GameModeManager>
     {
         mainStateMachine.TransitionTo(mainStateMachine.mainMenuState);
     }
-    public void GameOver(ButtonType fromButton = default)
+    public void GameOver(bool fromTimer)
     {
-        if(fromButton == default)
+        if (fromTimer)
         {
-            CanvasManager.GetInstance().SwitchPopup(PopupType.GameOver);
             Time.timeScale = 0;
+            UISwitcher.SwitchPopup(PopupType.gameOver);
         }
+
         mainStateMachine.TransitionTo(mainStateMachine.gameOverState);
     }
 

@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+using Architecture;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,15 +7,17 @@ public class TapeNumberSetter
     private const int tileThreshold = 119;
 
     private List<TileNeighbour> _tileNeighbours;
+    private PointsInteractor _pointsInteractor;
 
     public TapeNumberSetter(TapeContentSpawner contentSpawner)
     {
         _tileNeighbours = contentSpawner.tilesNeighbours;
+        _pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
 
     public void SetNumber(NumberManager lastNumber)
     {
-        float buffer = tileThreshold / 2;
+        float buffer = tileThreshold / 2 + 5;
 
         TileNeighbour closest = GetClosestTile((int)lastNumber.transform.localPosition.x);
         float delta = Mathf.Abs(closest.localPos.x - lastNumber.transform.localPosition.x);
@@ -39,7 +40,7 @@ public class TapeNumberSetter
 
         if (comboList != null)
         {
-            Points.RecieveCombo(comboList.ConvertAll(x => x.localPos));
+            _pointsInteractor.RecieveCombo(comboList.ConvertAll(x => x.pos));
         }
     }
 

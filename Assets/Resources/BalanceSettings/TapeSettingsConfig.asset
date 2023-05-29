@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac58f8629fad6344f9910dd22947a789, type: 3}
+  m_Name: TapeSettingsConfig
+  m_EditorClassIdentifier: 
+  _startTapesAmount: 3
+  _tilesOnTape: 6
+  _spawnNumberInTime: 1
+  _pointsForFirstNewTape: 70
+  _pointsForSecondNewTape: 140
+  _pointsForBlocker: 30
+  _maxBlockersAmount: 6
+  _blockersLifeTime: 10

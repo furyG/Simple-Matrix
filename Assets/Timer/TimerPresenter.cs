@@ -1,23 +1,31 @@
+using Architecture;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Architecture;
 
 public class TimerPresenter : MonoBehaviour
 {
     [SerializeField] private Image timerFill;
+    [SerializeField] private TextMeshProUGUI addedTimeText;
 
     private TimerInteractor timerInteractor;
 
     private void Start()
     {
         timerInteractor = Game.GetInteractor<TimerInteractor>();
-        timerInteractor.OnTimerValueChangedEvent += OnTimerValueChanged;
-        timerInteractor.OnTimerFinishedEvent += OnTimerFinished;
+        if(timerInteractor != null)
+        {
+            timerInteractor.OnTimerValueChangedEvent += OnTimerValueChanged;
+            timerInteractor.OnTimerFinishedEvent += OnTimerFinished;
+        }
     }
     private void OnDestroy()
     {
-        timerInteractor.OnTimerValueChangedEvent -= OnTimerValueChanged;
-        timerInteractor.OnTimerFinishedEvent -= OnTimerFinished;
+        if (timerInteractor != null)
+        {
+            timerInteractor.OnTimerValueChangedEvent -= OnTimerValueChanged;
+            timerInteractor.OnTimerFinishedEvent -= OnTimerFinished;
+        }
     }
     private void OnTimerFinished()
     {
@@ -37,9 +45,4 @@ public class TimerPresenter : MonoBehaviour
         if (timerInteractor.isPaused) timerInteractor.Unpause();
         else timerInteractor.Pause();
     }
-    private void StopTimerClicked()
-    {
-
-    }
-
 }

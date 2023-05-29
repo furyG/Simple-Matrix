@@ -1,7 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using UnityEngine;
 
+//not implemented
 public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
 {
     private int lifeTime = 5;
@@ -55,24 +55,25 @@ public class BonusManager : MonoBehaviour, ISpawnable, ITypeChangable<BonusType>
         }
         transform.localPosition = new(xPos, 0, 0);
     }
-    public BonusType SetType(BonusType type = default)
+    public BonusType SetType()
     {
-        if(type == default)
-        {
-            float typeChance = Random.Range(0f, 1f);
+        return BonusType.time; 
+        ////if(type == default)
+        ////{
+        ////    float typeChance = Random.Range(0f, 1f);
 
-            if(typeChance > 0f && typeChance <= 0.3f) type = BonusType.time;
+        ////    if(typeChance > 0f && typeChance <= 0.3f) type = BonusType.time;
         
-            if (typeChance > 0.3f && typeChance <= 0.8f) type = BonusType.life;
+        ////    if (typeChance > 0.3f && typeChance <= 0.8f) type = BonusType.life;
 
-            if (typeChance > 0.8f) type = BonusType.slow;
-        }
-        else
-        {
-            this._type = type;
-        }
-        return type;
+        ////    if (typeChance > 0.8f) type = BonusType.slow;
+        //}
+        //else
+        //{
+        //    this._type = type;
+        //}
+        //return type;
 
-        //_bonusRenderer.ChangeSprite((int)type);
+        ////_bonusRenderer.ChangeSprite((int)type);
     }
 }

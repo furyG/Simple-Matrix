@@ -1,5 +1,6 @@
 using Architecture;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TimerInteractor : Interactor, IBonusReciever
@@ -24,15 +25,17 @@ public class TimerInteractor : Interactor, IBonusReciever
         this.repository = Game.GetRepository<TimerRepository>();    
         
         pointsInteractor = Game.GetInteractor<PointsInteractor>();
-        Timer.Initialize(this);
+
+        if(pointsInteractor != null)
+        {
+            pointsInteractor.comboRecieved += OnComboRecieved;
+        }
     }
 
-    public override void Initialize()
+    private void OnComboRecieved(List<Vector2> numsPoses)
     {
-        if (pointsInteractor != null)
-        {
-            pointsInteractor.pointsForLevelUpCollected += AddLevelUpTime;
-        }
+        float additionTime = (numsPoses.Count * repository.timerIncrementForPoint) + (numsPoses.Count/2);
+        AddTime(null, additionTime);
     }
 
     public void SetTime(float seconds)
@@ -102,7 +105,7 @@ public class TimerInteractor : Interactor, IBonusReciever
         if(remainingSeconds <= 0)
         {
             Stop();
-            GameModeManager.GetInstance().GameOver();
+            GameModeManager.GetInstance().GameOver(true);
         }
         else
         {
@@ -112,11 +115,7 @@ public class TimerInteractor : Interactor, IBonusReciever
     private void AddTime(object sender, float amount)
     {
         remainingSeconds += amount;
-        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, Balance.GetInstance().FirstLevelTime);
-    }
-    private void AddLevelUpTime()
-    {
-        AddTime(null, repository.levelUpIncrementTime);
+        remainingSeconds = Mathf.Clamp(remainingSeconds, 0, repository.originLevelTime);
     }
 
     public void TakeBonus()

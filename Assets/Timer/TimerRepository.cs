@@ -1,22 +1,24 @@
 using Architecture;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class TimerRepository : Repository
 {
     public float leftTime { get; set; }
     public float originLevelTime { get; private set; }
-    public float levelUpIncrementTime { get; private set; }
+    public float timerIncrementForPoint { get; private set; }
     public float timerBonusIncrementAmount { get; private set; }
     public float startGameTime { get; set; }
 
+    private RoundSettingsConfig _roundSettingsConfig;
+    private BonusSettingsConfig _bonusSettingsConfig;
+
     public override void Initialize()
     {
-        originLevelTime = Balance.GetInstance().FirstLevelTime;
-        levelUpIncrementTime = Balance.GetInstance().LevelUpTimerIncrement;
-        timerBonusIncrementAmount = Balance.GetInstance().TimerBonusIncrementAmount;
+        _roundSettingsConfig = Game.GetInteractor<ConfigInteractor>().GetConfig<RoundSettingsConfig>();
+        _bonusSettingsConfig = Game.GetInteractor<ConfigInteractor>().GetConfig<BonusSettingsConfig>();
+
+        originLevelTime = _roundSettingsConfig.firstRoundTime;
+        timerIncrementForPoint = _roundSettingsConfig.timerIncrementForPoint;
+        timerBonusIncrementAmount = _bonusSettingsConfig.timeBonusAdditionalTime;
     }
 
     public override void Save()

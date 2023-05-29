@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Architecture;
 
 public class GameOverState : IState
 {
     private GameModeManager main;
+    private TimerInteractor _timerInteractor;
     public GameOverState(GameModeManager main)
     {
         this.main = main;
+        _timerInteractor = Game.GetInteractor<TimerInteractor>();
     }
     public void Enter()
     {
-        Timer.Stop();
+        _timerInteractor.Stop();
     }
 
     public void Update()

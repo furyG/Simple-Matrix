@@ -1,62 +1,35 @@
-using Architecture;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Tapes
 {
     public class TapeSpawner : MonoBehaviour
     {
         private List<TapeManager> _tapes;
-
         private List<List<TileNeighbour>> _tilesMatrix;
-
-        private int tapesAmount
-        {
-            get => _tapesAmount;
-            set
-            {
-                _tapesAmount = value;
-                _tapesAmount = Mathf.Clamp(value, Balance.GetInstance().StartTapesAmount, 5);
-            }
-        }
-        private int _tapesAmount;
-        
-
+        private TapeComplicationHandler _complicationHandler;
+        private TilesBlockHandler _tileBlockHandler;
         private int n = 0;
-        private LevelInteractor levelInteractor;
-
-        private void Awake()
-        {
-            tapesAmount = Balance.GetInstance().StartTapesAmount;
-            levelInteractor = Game.GetInteractor<LevelInteractor>();
-        }
 
         private void Start()
         {
-            if(levelInteractor != null)
-            {
-                levelInteractor.levelChanged += OnLevelChanged;
-            }
+            _tileBlockHandler = new TilesBlockHandler();
+            _complicationHandler = new TapeComplicationHandler(this, _tileBlockHandler);
         }
-
-        private void OnDisable()
+        private void OnDestroy()
         {
-            if(levelInteractor != null)
-            {
-                levelInteractor.levelChanged -= OnLevelChanged;
-            }
+            _complicationHandler?.OnDestroy();
         }
 
-        private void OnLevelChanged(int level)
+        public void ClearTapes()
         {
-            if (level == 3)
+            for (int i = 0; i < transform.childCount; i++)
             {
-                SpawnTape();
-                InitializeTileNeighbours();
+                Destroy(transform.GetChild(i).gameObject);
             }
+            n = 0;
         }
-
-        private TapeManager SpawnTape()
+        public TapeManager SpawnTape()
         {
             TapeManager t = TapeObjectsFactory.GetInstance().Get<TapeManager>(transform);
             _tilesMatrix.Add(t.GetComponent<TapeContentSpawner>().SpawnTiles());
@@ -67,14 +40,7 @@ namespace Tapes
 
             return t;
         }
-        private void ClearTapes()
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
-        }
-        private void InitializeTileNeighbours()
+        public void InitializeTileNeighbours()
         {
             for(int y = 0; y < _tilesMatrix.Count; y++)
             {
@@ -83,20 +49,31 @@ namespace Tapes
                     _tilesMatrix[y][x].InitializeTileNeighbour(x, y, _tilesMatrix);
                 }
             }
+            _tileBlockHandler.tileNeighbours = _tilesMatrix;
         }
         public void StopTapes()
         {
+            if (_tapes == null) return;
+
             foreach (var tape in _tapes)
             {
                 tape.StopTape();
             }
-        }
-        public void SpawnTapes()
-        {
-            ClearTapes();
 
+            _tileBlockHandler.OnTapesStop();
+        }
+        public void SpawnTapes(bool newGame)
+        {
             _tilesMatrix = new List<List<TileNeighbour>>();
             _tapes = new List<TapeManager>();
+
+            if (newGame)
+            {
+                _complicationHandler.OnNewGame();
+            }
+
+            int tapesAmount = _complicationHandler.tapesAmount;
+
             for (int i = tapesAmount - 1; i > -1; i--)
             {
                 SpawnTape();

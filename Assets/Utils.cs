@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 // This is actually OUTSIDE of the Utils Class
 public enum BoundsTest

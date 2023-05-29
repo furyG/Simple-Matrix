@@ -1,20 +1,13 @@
 using Architecture;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PointsPresenter : MonoBehaviour
+public class PointsPresenter : MonoBehaviour, IFinishReportable
 {
-    [SerializeField] private Image pointsImage;
     [SerializeField] private TextMeshProUGUI pointsTxt;
-    [SerializeField] private Transform canvasTransform;
 
-    private Image activePointsFill;
     private PointsInteractor pointsInteractor;
-    private FloatingPointsHandler floatingPointsHandler;
+    private FloatingElementHandler<FloatingPoints> floatingPointsHandler;
 
     private void Start()
     {
@@ -23,10 +16,7 @@ public class PointsPresenter : MonoBehaviour
         if(pointsInteractor != null)
         {
             pointsInteractor.pointsChanged += OnPointsChangedEvent;
-            pointsInteractor.comboRecieved += OnComboRecievedEvent;
         }
-
-        floatingPointsHandler = new FloatingPointsHandler(this, canvasTransform, pointsImage.transform.position);
     }
 
     private void OnDestroy()
@@ -34,32 +24,24 @@ public class PointsPresenter : MonoBehaviour
         if (pointsInteractor != null)
         {
             pointsInteractor.pointsChanged -= OnPointsChangedEvent;
-            pointsInteractor.comboRecieved -= OnComboRecievedEvent;
-        }
-    }
-    private void OnComboRecievedEvent(List<Vector2> numsToAnimate)
-    {
-        foreach(var num in numsToAnimate)
-        {
-            floatingPointsHandler.InitFloatingPoints(num);
         }
     }
     private void UpdateView()
     {
         if (pointsInteractor == null) return;
 
-        if(pointsTxt != null && pointsImage != null)
+        if(pointsTxt != null)
         {
-            pointsImage.fillAmount = (float)pointsInteractor.points / (float)pointsInteractor.maxPointsOnLvl;
             pointsTxt.text = "счёт: " + pointsInteractor.points.ToString();
         }
     }
-    private void OnPointsChangedEvent()
+    private void OnPointsChangedEvent(int points)
     {
         UpdateView();
     }
-    public void FPCallback(FloatingPoints floatingPoints)
+
+    public void FloatingElementCallBack()
     {
-        //delete
+        Debug.Log("recieved");
     }
 }

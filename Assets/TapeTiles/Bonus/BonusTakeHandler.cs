@@ -24,7 +24,6 @@ public class BonusTakeHandler
         {
             { BonusType.time, timerInteractor},
             { BonusType.life, lifesInteractor},
-            { BonusType.slow, Balance.GetInstance()}
         };
     }
     public void TakeBonus(BonusType bonusType)

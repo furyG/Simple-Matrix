@@ -1,47 +1,27 @@
+using Architecture;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class NumberRenderer : MonoBehaviour, IRenderer<TextMeshProUGUI>
+public class NumberRenderer : RendererBase
 {
-    [SerializeField] private BaseColors colors;
     public TextMeshProUGUI visualizer => GetComponent<TextMeshProUGUI>();
+
+    private NumberSettingsConfig _numberSettingsConfig;
 
     private void Awake()
     {
-        InitializeSprites();
+        _numberSettingsConfig = Game.GetInteractor<ConfigInteractor>().GetConfig<NumberSettingsConfig>();
     }
-    public void ChangeColor(Color color)
+    public override void ChangeColor(Color color)
     {
         visualizer.color = color;
-    }
-
-    public void ChangeSprite(Sprite sprite)
-    {
-        
     }
     public void ChangeSprite(int number)
     {
         visualizer.text = number.ToString();
     }
-
-    public void InitializeSprites()
-    {
-        
-    }
     public void ChangeColorByType(NumberType type)
     {
-        switch(type)
-        {
-            case NumberType.simple:
-                ChangeColor(colors.orange);
-                break;
-            case NumberType.changing:
-                ChangeColor(colors.black);
-                break;
-            default: 
-                ChangeColor(colors.black);
-                break;
-        }
+        ChangeColor(_numberSettingsConfig.GetNumberColorByType(type));
     }
 }

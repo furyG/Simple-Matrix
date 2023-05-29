@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class TapeManager : Observer
 {
     public NumberManager lastNumber
@@ -25,6 +21,7 @@ public class TapeManager : Observer
     }
     private void ClickCheck()
     {
+        if (!_spawner.lastSpawnedNumber) return;
         if (!_spawner.lastSpawnedNumber.isActiveAndEnabled) return;
 
         lastNumber = _spawner.lastSpawnedNumber;

@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class NumberManager : MonoBehaviour
 {
+    public NumberComplicationHandler numberComplicationHandler { get; private set; }
+
     public int number => _number;
     private int _number;
-
-    public bool boarded = false;
 
     private NumberRenderer _renderer;
     private ITypeChangable<NumberType> _typeHandler;
 
     private void Awake()
     {
+        numberComplicationHandler = new NumberComplicationHandler(this);
+
         _renderer = GetComponent<NumberRenderer>();
         _typeHandler = GetComponent<ITypeChangable<NumberType>>();
     }

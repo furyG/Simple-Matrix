@@ -2,53 +2,27 @@
 using System.Collections;
 using UnityEngine;
 
-public class NumberMover : MonoBehaviour, IMoveable<NumberType>, ISpawnable
+public class NumberMover : MonoBehaviour, IMoveable, ISpawnable
 {
     public event Action OnMovingEnd;
 
     public float runDuration { get; set; }
-    public float slowRunDuration => balance.SlowNumberRunDuration;
-    public IEnumerator moveCoroutine { get; set; }
-    public float defaultRunDuration => balance.NumberRunDuration;
+    public float defaultRunDuration { get; }
 
     private float runElapsedTime;
     private float startRunningPos;
 
-    protected Transform _parent;
-    protected RectTransform _rectTransform;
-    private Balance balance;
-    private NumberManager _manager;
+    private RectTransform _rectTransform;
+    private NumberComplicationHandler _numberComplicationHandler;
 
     private void Awake()
     {
-        _manager = GetComponent<NumberManager>();
+        _numberComplicationHandler = GetComponent<NumberManager>().numberComplicationHandler;
         _rectTransform = GetComponent<RectTransform>();
-        
-
-        balance = Balance.GetInstance();
-
-        runDuration = CheckForSlow() ? slowRunDuration : balance.NumberRunDuration;
-
-        moveCoroutine = MoveCoroutine();
-    }
-    private void Start()
-    {
-        if (balance != null)
-        {
-            balance.slowBonusTaken += SlowUp;
-            balance.slowBonusDurationEnd += SlowEnd;
-        }
-    }
-    private void OnDestroy()
-    {
-        if (balance != null)
-        {
-            balance.slowBonusTaken -= SlowUp;
-            balance.slowBonusDurationEnd -= SlowEnd;
-        }
     }
     private void OnEnable()
     {
+        runDuration = _numberComplicationHandler.GetRunDuration();
         StartMove();
     }
     private void OnDisable()
@@ -57,7 +31,7 @@ public class NumberMover : MonoBehaviour, IMoveable<NumberType>, ISpawnable
     }
     public void EndMove()
     {
-        if (moveCoroutine != null)
+        if (MoveCoroutine() != null)
         { 
             StopCoroutine(MoveCoroutine());
             runElapsedTime = 0f;
@@ -85,21 +59,6 @@ public class NumberMover : MonoBehaviour, IMoveable<NumberType>, ISpawnable
         OnMovingEnd?.Invoke();
         gameObject.SetActive(false);
     }
-    public bool CheckForSlow()
-    {
-        return balance.Slowed;
-    }
-
-    public void SlowEnd()
-    {
-        runDuration = balance.NumberRunDuration;
-    }
-
-    public void SlowUp()
-    {
-        runDuration = balance.SlowNumberRunDuration;
-    }
-
 
     public void SetStartPosition(Vector2 startPos = default)
     {

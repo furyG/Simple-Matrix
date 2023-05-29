@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
@@ -7,42 +5,36 @@ public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
     public NumberType type => _type;
     private NumberType _type;
 
+    private int _currentMaxNumberValue;
     private int _number;
     private NumberManager _manager;
+    private NumberComplicationHandler _numberComplicationHandler;
 
     private void Awake()
     {
-        _manager= GetComponent<NumberManager>();
+        _manager = GetComponent<NumberManager>();
+        _numberComplicationHandler = _manager.numberComplicationHandler;
     }
 
-    public NumberType SetType(NumberType type = NumberType.simple)
+    public NumberType SetType()
     {
-        if(type != NumberType.zero)
-        {
-            float chance = Random.Range(0f, 1f);
-            if (chance > 0.8f)
-            {
-                type = NumberType.changing;
-            }
-        }
-        this._type = type;
+        float chance = Random.Range(0f, 1f);
+        _type = _numberComplicationHandler.GetNumberType(chance);
 
-        ChooseNumber(type);
+        ChooseNumber(_type);
 
-        return type;
+        return _type;
     }
     private void ChooseNumber(NumberType type)
     {
+        _currentMaxNumberValue = _numberComplicationHandler.GetNumbersMaxValue();
         switch (type)
         {
-            case NumberType.zero:
-                _number = 0;
-                break;
             case NumberType.simple:
-                _number = Random.Range(1, 7);
+                _number = Random.Range(1, _currentMaxNumberValue + 1);
                 break;
             case NumberType.changing:
-                _number = 1;
+                _number = Random.Range(1, _currentMaxNumberValue + 1);
                 StartCoroutine(Utils.InvokeRoutine(IncreaseNum, 1));
                 break;
         }
@@ -50,9 +42,9 @@ public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
     }
     private void IncreaseNum()
     {
-        if (_manager.boarded) return;
+        _number = Mathf.Clamp(++_number, 1, _currentMaxNumberValue);
+        _manager.SetNumberValues(_number);
 
-        _number = _manager.SetNumberValues(++_number);
         StartCoroutine(Utils.InvokeRoutine(IncreaseNum, 1));
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,9 @@ public enum ButtonType
     MainMenu,
     Leaderboard,
     Credits,
-    GameOver
+    GameOver,
+    SaveScore,
+    ChangeLanguage
 }
 
 [RequireComponent(typeof(Button))]

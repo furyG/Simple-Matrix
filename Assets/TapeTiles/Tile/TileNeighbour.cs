@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class TileNeighbour
     public int number { get; private set; }
 
     public Vector2 localPos => _tile.transform.localPosition;
+    public Vector2 pos => _tile.transform.position;
     public TileNeighbour Left { get; private set; }
     public TileNeighbour Top { get; private set; }
     public TileNeighbour Right { get; private set; }
@@ -15,6 +15,7 @@ public class TileNeighbour
     public int x { get; set; }
     public int y { get; set; }
 
+    private bool _isBlocked = false;
     private readonly Tile _tile;
 
     public TileNeighbour[] Neighbors => new[]
@@ -70,8 +71,20 @@ public class TileNeighbour
 
     public void ChangeNumberValue(int number)
     {
+        if (_isBlocked) return;
+
         this.number = number;
-        _tile.SetNumber(number);
+        _tile.SetNumberRender(number);
+    }
+
+    public void ClearTileNumber()
+    {
+        this.number = 0;
+        _tile.ClearNumberRender();
+    }
+    public void PlayTakingAnimation()
+    {
+        _tile.PlayTakingAnimation();
     }
 
     public List<TileNeighbour> TryGetCombo()
@@ -81,10 +94,21 @@ public class TileNeighbour
         {
             foreach (var neighbour in combo)
             {
-                neighbour.ChangeNumberValue(0);
+                neighbour.PlayTakingAnimation();
             }
             return combo;
         }
         return null;
+    }
+    public void Block()
+    {
+        _isBlocked = true;
+        _tile.BlockTile();
+        ClearTileNumber();
+    }
+    public void Unblock()
+    {
+        _isBlocked = false;
+        _tile.UnblockTile();
     }
 }

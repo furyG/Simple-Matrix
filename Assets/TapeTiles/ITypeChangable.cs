@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public enum NumberType
 {
     simple,
-    allNums,
-    changing,
-    zero
+    changing
 }
 
+//not implemented
 public enum BonusType
 {
     time = 0,
@@ -21,5 +16,5 @@ public enum BonusType
 public interface ITypeChangable<T> where T : System.Enum
 {
     T type { get; }
-    T SetType(T t = default);
+    T SetType();
 }

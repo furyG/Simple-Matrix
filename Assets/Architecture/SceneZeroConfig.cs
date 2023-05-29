@@ -1,8 +1,6 @@
 using Architecture;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class SceneZeroConfig : SceneConfig
 {
@@ -14,10 +12,10 @@ public class SceneZeroConfig : SceneConfig
     {
         var interactorsMap = new Dictionary<Type, Interactor>();
 
+        this.CreateInteractor<ConfigInteractor>(interactorsMap);
         this.CreateInteractor<PointsInteractor>(interactorsMap);
-        this.CreateInteractor<TimerInteractor>(interactorsMap);
-        this.CreateInteractor<LevelInteractor>(interactorsMap);
         this.CreateInteractor<LifesInteractor>(interactorsMap);
+        this.CreateInteractor<TimerInteractor>(interactorsMap);
 
         return interactorsMap;
     }
@@ -26,10 +24,10 @@ public class SceneZeroConfig : SceneConfig
     {
         var repositoriesMap = new Dictionary<Type, Repository>();
 
+        this.CreateRepository<ConfigRepository>(repositoriesMap);
+        this.CreateRepository<LifesRepository>(repositoriesMap);
         this.CreateRepository<PointsRepository>(repositoriesMap);
         this.CreateRepository<TimerRepository>(repositoriesMap);
-        this.CreateRepository<LevelRepository>(repositoriesMap);
-        this.CreateRepository<LifesRepository>(repositoriesMap) ;
 
         return repositoriesMap;
     }

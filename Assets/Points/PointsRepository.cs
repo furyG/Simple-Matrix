@@ -1,26 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Architecture
 {
     public class PointsRepository : Repository
     {
         public int points { get; set; }
-        public int pointsForNextLevel { get; set; }
-        public int pointsIncrement { get; private set; }
+        public int pointsForNumber { get; private set; }
 
-        public override void OnCreate()
-        {
-            points = 0;
-
-            pointsForNextLevel = Balance.GetInstance().FirstRoundPointsCap;
-            pointsIncrement = Balance.GetInstance().IncrementPointsCap;
-        }
+        private PointsSettingsConfig _pointsSettingsConfig;
 
         public override void Initialize()
         {
+            points = 0;
 
+            _pointsSettingsConfig = Game.GetInteractor<ConfigInteractor>().GetConfig<PointsSettingsConfig>();
+
+            pointsForNumber = _pointsSettingsConfig.pointsForNumber;
         }
 
         public override void Save()

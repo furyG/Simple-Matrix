@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BonusRenderer : MonoBehaviour, IRenderer<Image>
+//not implemented
+public class BonusRenderer : RendererBase
 {
     public Image visualizer => GetComponent<Image>();
-
-    public Color32 GAME_BLACK => throw new System.NotImplementedException();
-
-    public Color32 GAME_RED => throw new System.NotImplementedException();
 
     public BaseColors colors { get; set; }
 
@@ -20,12 +15,12 @@ public class BonusRenderer : MonoBehaviour, IRenderer<Image>
         InitializeSprites();
     }
 
-    public void ChangeColor(Color color)
+    public override void ChangeColor(Color color)
     {
         visualizer.color = color;
     }
 
-    public void ChangeSprite(Sprite sprite)
+    public override void ChangeSprite(Sprite sprite)
     {
         visualizer.sprite = sprite;
     }

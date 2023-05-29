@@ -8,7 +8,6 @@ public class StateMachine
     public event Action <IState> onStateChanged;
     public IState CurrentState { get; private set; }
 
-    public IdleState idleState;
     public PlayState playState;
     public GameOverState gameOverState;
     public MainMenuState mainMenuState;
@@ -22,7 +21,7 @@ public class StateMachine
     {
         await Task.Yield();
 
-        CurrentState.Exit();
+        CurrentState.Exit(fromButton);
         CurrentState = nextState;
         nextState.Enter(fromButton);
 
@@ -47,7 +46,6 @@ public class StateMachine
     }
     public StateMachine(GameModeManager main)
     {
-        this.idleState = new IdleState(main);
         this.playState = new PlayState(main);
         this.gameOverState = new GameOverState(main);
         this.mainMenuState = new MainMenuState(main);
