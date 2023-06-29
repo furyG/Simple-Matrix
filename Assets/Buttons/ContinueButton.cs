@@ -9,6 +9,7 @@ public class ContinueButton : Clickable
 
     protected override void OnClick()
     {
+        base.OnClick();
         GameModeManager.GetInstance().ContinueGame(type);
     }
 }

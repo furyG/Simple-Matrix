@@ -1,18 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CanvasSwitcher : MonoBehaviour
+public class CanvasSwitcher : Clickable
 {
     [SerializeField] private CanvasType canvasTypeToSwitch;
 
-    private Button _buttonComponent;
     private GameUISwitcher _uISwitcher;
-    
-    protected void Awake()
+
+    protected override ButtonType type => ButtonType.None;
+
+    protected override void Awake()
     {
-        _buttonComponent = GetComponent<Button>();
-        _buttonComponent.AddListener(OnButtonClicked);
+        base.Awake();
+
         _uISwitcher = GameModeManager.GetInstance().UISwitcher;
+        buttonComponent.AddListener(OnButtonClicked);
     }
 
     protected void OnButtonClicked()

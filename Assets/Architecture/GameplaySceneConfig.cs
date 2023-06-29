@@ -16,6 +16,7 @@ public class GameplaySceneConfig : SceneConfig
         this.CreateInteractor<PointsInteractor>(interactorsMap);
         this.CreateInteractor<LifesInteractor>(interactorsMap);
         this.CreateInteractor<TimerInteractor>(interactorsMap);
+        this.CreateInteractor<AudioInteractor>(interactorsMap);
 
         return interactorsMap;
     }
@@ -28,6 +29,7 @@ public class GameplaySceneConfig : SceneConfig
         this.CreateRepository<LifesRepository>(repositoriesMap);
         this.CreateRepository<PointsRepository>(repositoriesMap);
         this.CreateRepository<TimerRepository>(repositoriesMap);
+        this.CreateRepository<AudioRepository>(repositoriesMap);
 
         return repositoriesMap;
     }

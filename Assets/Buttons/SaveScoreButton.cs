@@ -16,6 +16,7 @@ public class SaveScoreButton : Clickable
 
     protected override void OnClick()
     {
+        base.OnClick();
         _playerManager.SetPlayerName(nameInputField.text);
         _playerManager.SubmitScore();
     }

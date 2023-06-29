@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed3af2cd791f1ae4baa04e9f03c1a257, type: 3}
+  m_Name: SoundsContainer
+  m_EditorClassIdentifier: 
+  _comboBuilded: {fileID: 8300000, guid: 45f444f1080fd0e4b94bd6a5bacd6f7f, type: 3}
+  _startGame: {fileID: 0}
+  _timeEnded: {fileID: 8300000, guid: 0768790a627e1c1419aeaffc53f802cc, type: 3}
+  _buttonClicked: {fileID: 8300000, guid: d8c8a284c59393b4f804c8e48764562e, type: 3}

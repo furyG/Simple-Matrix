@@ -2,14 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class PopupSwitcher : MonoBehaviour
+public class PopupSwitcher : Clickable
 {
     [SerializeField] private PopupType popupTypeToSwitch;
-    private Button buttonComponent;
 
-    protected void Start()
+    protected override ButtonType type => ButtonType.None;
+
+    protected override void Awake()
     {
-        buttonComponent = GetComponent<Button>();
+        base.Awake();
         buttonComponent.AddListener(SwitchPopup);
     }
 

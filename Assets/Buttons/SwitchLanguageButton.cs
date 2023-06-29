@@ -6,8 +6,11 @@ public class SwitchLanguageButton : Clickable
     private bool active = false;
     private int localeID = 1;
     protected override ButtonType type => ButtonType.ChangeLanguage;
+
     protected override void OnClick()
     {
+        base.OnClick();
+
         localeID = localeID > 0 ? 0 : 1;
 
         ChangeLocale(localeID);

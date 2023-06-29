@@ -1,6 +1,6 @@
+using Architecture;
 using System;
 using System.Collections.Generic;
-using Architecture;
 using UnityEngine;
 
 public class PointsInteractor : Interactor
@@ -13,9 +13,13 @@ public class PointsInteractor : Interactor
     private int pointsForNumber => repository.pointsForNumber;
     private PointsRepository repository;
 
+    private AudioInteractor _audioInteractor;
+
     public override void OnCreate()
     {
         this.repository = Game.GetRepository<PointsRepository>();
+
+        _audioInteractor = Game.GetInteractor<AudioInteractor>();
     }
     public override void Initialize()
     {
@@ -27,6 +31,8 @@ public class PointsInteractor : Interactor
     {
         AddPoints(null, numsToAnimate.Count * pointsForNumber);
         comboRecieved?.Invoke(numsToAnimate);
+
+        _audioInteractor?.PlayComboBuildedSound();
     }
     public void AddPoints(object sender, int value)
     {

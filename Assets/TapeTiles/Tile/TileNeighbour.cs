@@ -96,6 +96,7 @@ public class TileNeighbour
             {
                 neighbour.PlayTakingAnimation();
             }
+
             return combo;
         }
         return null;
