@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
@@ -35,16 +36,19 @@ public class NumberTypeHandler : MonoBehaviour, ITypeChangable<NumberType>
                 break;
             case NumberType.changing:
                 _number = Random.Range(1, _currentMaxNumberValue + 1);
-                StartCoroutine(Utils.InvokeRoutine(IncreaseNum, 1));
+                StartCoroutine(InvokeNumberIncreaseInTime(1));
                 break;
         }
         _manager.SetNumberValues(_number);
     }
-    private void IncreaseNum()
+
+    private IEnumerator InvokeNumberIncreaseInTime(int time)
     {
+        yield return new WaitForSeconds(time);
+
         _number = Mathf.Clamp(++_number, 1, _currentMaxNumberValue);
         _manager.SetNumberValues(_number);
 
-        StartCoroutine(Utils.InvokeRoutine(IncreaseNum, 1));
+        StartCoroutine(InvokeNumberIncreaseInTime(1));
     }
 }

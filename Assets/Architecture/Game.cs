@@ -4,9 +4,9 @@ namespace Architecture
     {
         private static Scene currentScene;
         public static SceneConfig sceneConfig;
-        public static void Run()
+        public static void Init()
         {
-            sceneConfig = new SceneZeroConfig();
+            sceneConfig = new GameplaySceneConfig();
             currentScene = new Scene(sceneConfig);
 
             Coroutines.StartRoutine(currentScene.InitializeRoutine());

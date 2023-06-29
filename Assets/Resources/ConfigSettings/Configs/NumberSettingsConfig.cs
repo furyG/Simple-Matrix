@@ -5,7 +5,6 @@ using UnityEngine;
 public class NumberSettingsConfig : ScriptableObject
 {
     [SerializeField] private float _numberRunDuration;
-    [SerializeField] private float _slowNumberRunDuration;
     [SerializeField] private float _runDurationDecrement;
     [SerializeField] private float _minNumberRunDuration;
     [SerializeField] private float _chanceSetIncrement;
@@ -14,7 +13,6 @@ public class NumberSettingsConfig : ScriptableObject
     [SerializeField] private int _pointsForNumbersMaxValueIncrement;
 
     public float numberRunDuration => _numberRunDuration;
-    public float slowNumberRunDuration => _slowNumberRunDuration;
     public float runDurationDecrement => _runDurationDecrement;
     public float minNumberRunDuration => _minNumberRunDuration;
     public float chanceSetIncrement => _chanceSetIncrement;

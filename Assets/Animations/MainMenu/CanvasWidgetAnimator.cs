@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CanvasWidgetAnimator : MonoBehaviour
+public class CanvasWidgetAnimator : MonoBehaviour, IAnimatableUI
 {
     public event Action OnHideAnimationOver;
     public event Action OnAppearAnimationOver;
@@ -13,18 +13,23 @@ public class CanvasWidgetAnimator : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void PlayHide()
+    public void PlayHideAnimation()
     {
         this._animator.SetTrigger("hide");
     }
 
-    private void AppearAnimationOver()
+    public void AppearAnimationOver()
     {
         OnAppearAnimationOver?.Invoke();
     }
 
-    private void HideAnimationOver()
+    public void HideAnimationOver()
     {
         OnHideAnimationOver?.Invoke();
+    }
+
+    public void IdleAnimationOver()
+    {
+        
     }
 }

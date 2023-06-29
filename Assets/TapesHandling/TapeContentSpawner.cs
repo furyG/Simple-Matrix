@@ -24,14 +24,9 @@ public class TapeContentSpawner : MonoBehaviour
 
         _spawnNumberTime = _tapeSettingsConfig.spawnNumberInTime;
         _tilesOnTape = _tapeSettingsConfig.tilesOnTape;
-    }
 
-    private void Start()
-    {
         this._pool = new PoolMono<NumberManager>(_poolCount, transform);
         this._pool.autoExpand = _autoExpand;
-
-        InvokeSpawnContent();
     }
     private void SpawnContent()
     {
@@ -77,6 +72,6 @@ public class TapeContentSpawner : MonoBehaviour
     public void CancelContentSpawning()
     {
         StopAllCoroutines();
-        if (lastSpawnedNumber) Destroy(lastSpawnedNumber.gameObject);
+        if (lastSpawnedNumber) lastSpawnedNumber.gameObject.SetActive(false);
     }
 }

@@ -30,6 +30,7 @@ public class FloatingPoints : FloatingElement
     }
     public override void FPCallback(FloatingPoints fp)
     {
+        base.FPCallback(fp);
         points += fp.points;
     }
     protected override void ToggleVizualizer(bool state)

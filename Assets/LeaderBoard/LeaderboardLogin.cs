@@ -1,21 +1,16 @@
 using LootLocker.Requests;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
-public class LeaderBoard : MonoBehaviour
+public static class LeaderboardLogin
 {
-    [SerializeField] private TextMeshProUGUI playerNames;
-    [SerializeField] private TextMeshProUGUI playerScores;
-
-    private  const int leaderboardID = 14204;
-
-    private void OnEnable()
+    private const int leaderboardID = 14204;
+    
+    public static void Init()
     {
-        StartCoroutine(FetchTopHighscoresRoutine());
+        Coroutines.StartRoutine(FetchTopHighscoresRoutine());
     }
-
-    public IEnumerator FetchTopHighscoresRoutine()
+    private static IEnumerator FetchTopHighscoresRoutine()
     {
         bool done = false;
         LootLockerSDKManager.GetScoreListMain(leaderboardID, 10, 0, (response) =>
@@ -27,7 +22,7 @@ public class LeaderBoard : MonoBehaviour
 
                 LootLockerLeaderboardMember[] members = response.items;
 
-                for(int i = 0; i < members.Length; i++)
+                for (int i = 0; i < members.Length; i++)
                 {
                     tempPlayerNames += members[i].rank + ". ";
                     if (members[i].player.name != "")
@@ -42,8 +37,6 @@ public class LeaderBoard : MonoBehaviour
                     tempPlayerNames += "\n";
                 }
                 done = true;
-                playerNames.text = tempPlayerNames;
-                playerScores.text = tempPlayerScores;
             }
             else
             {

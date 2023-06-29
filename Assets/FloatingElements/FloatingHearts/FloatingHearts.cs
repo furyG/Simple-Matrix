@@ -13,7 +13,6 @@ public class FloatingHearts : FloatingElement
         set
         {
             _heartPoints = value;
-            ChangeScale();
         }
     }
     protected int _heartPoints = 0;
@@ -25,14 +24,10 @@ public class FloatingHearts : FloatingElement
 
     public override void FPCallback(FloatingPoints fp)
     {
-        
+        base.FPCallback(fp);
     }
     protected override void ToggleVizualizer(bool state)
     {
         vizualizer.enabled = state;
-    }
-    public override void ChangeScale()
-    {
-        
     }
 }

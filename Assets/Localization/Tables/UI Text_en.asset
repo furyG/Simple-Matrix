@@ -58,6 +58,26 @@ MonoBehaviour:
     m_Localized: matrix
     m_Metadata:
       m_Items: []
+  - m_Id: 7681953152970752
+    m_Localized: main menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7682337485434880
+    m_Localized: continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7682787207098368
+    m_Localized: game over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7686552194723840
+    m_Localized: new game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10742898401857536
+    m_Localized: 'score:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

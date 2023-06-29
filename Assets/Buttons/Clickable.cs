@@ -25,7 +25,7 @@ public abstract class Clickable : MonoBehaviour
     protected virtual void Awake()
     {
         buttonComponent = GetComponent<Button>();
-        buttonComponent.onClick.AddListener(OnClick);
+        buttonComponent.AddListener(OnClick);
     }
 
     protected abstract void OnClick();

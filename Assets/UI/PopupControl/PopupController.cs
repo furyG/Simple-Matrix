@@ -5,31 +5,31 @@ public class PopupController : MonoBehaviour
     public PopupType type => _type;
     [SerializeField] private PopupType _type;
 
-    [SerializeField] private PopupWidgetAnimator _animator;
+    [SerializeField] private PopupWidgetAnimator _popupAnimator;
 
     protected virtual void OnEnable()
     {
-        if (_animator)
+        if (_popupAnimator)
         {
-            _animator.OnHideAnimationOver += OnHideAnimationOverEvent;
-            _animator.OnAppearAnimationOver += OnAppearAnimationOver;
+            _popupAnimator.OnHideAnimationOver += OnHideAnimationOverEvent;
+            _popupAnimator.OnAppearAnimationOver += OnAppearAnimationOver;
         }
     }
 
     protected virtual void OnDisable()
     {
-        if (_animator)
+        if (_popupAnimator)
         {
-            _animator.OnHideAnimationOver -= OnHideAnimationOverEvent;
-            _animator.OnAppearAnimationOver -= OnAppearAnimationOver;
+            _popupAnimator.OnHideAnimationOver -= OnHideAnimationOverEvent;
+            _popupAnimator.OnAppearAnimationOver -= OnAppearAnimationOver;
         }
     }
 
     public void DisablePopup()
     {
-        if(_animator)
+        if(_popupAnimator)
         {
-            _animator.PlayHide();
+            _popupAnimator.PlayHideAnimation();
         }
         else
         {

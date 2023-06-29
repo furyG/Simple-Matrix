@@ -17,7 +17,25 @@ public class TapeManager : Observer
     }
     private void Start()
     {
-        _tapeNumberSetter = new TapeNumberSetter(_spawner);
+        _tapeNumberSetter = new TapeNumberSetter(_spawner.tilesNeighbours);
+    }
+
+    public override void Notify(Subject subject)
+    {
+        ClickCheck();
+    }
+    public void StartContentSpawning()
+    {
+        _spawner.InvokeSpawnContent();
+    }
+    public void StopContentSpawning()
+    {
+        _spawner.CancelContentSpawning();
+    }
+    public void ClearTapeContent()
+    {
+        _tapeNumberSetter.ClearAllNeighbours();
+        lastNumber?.gameObject.SetActive(false);
     }
     private void ClickCheck()
     {
@@ -28,14 +46,5 @@ public class TapeManager : Observer
         _tapeNumberSetter.SetNumber(lastNumber);
 
         _spawner.InvokeSpawnContent();
-    }
-
-    public override void Notify(Subject subject)
-    {
-        ClickCheck();
-    }
-    public void StopTape()
-    {
-        _spawner.CancelContentSpawning();
     }
 }

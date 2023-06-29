@@ -3,23 +3,8 @@ using UnityEngine;
 public abstract class CanvasController : MonoBehaviour
 {
     [SerializeField] private CanvasWidgetAnimator _animator;
-    protected CanvasType _type;
     public CanvasType type => _type;
-    public void CanvasDisable()
-    {
-        if (_animator)
-        {
-            _animator.PlayHide();
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
-    }
-    public bool IsCanvasDeactivated()
-    {
-        return gameObject.activeInHierarchy == false;
-    }
+    [SerializeField] protected CanvasType _type;
 
     protected virtual void OnEnable()
     {
@@ -38,6 +23,23 @@ public abstract class CanvasController : MonoBehaviour
             _animator.OnAppearAnimationOver -= OnAppearAnimationOverEvent;
         }
     }
+
+    public void CanvasDisable()
+    {
+        if (_animator)
+        {
+            _animator.PlayHideAnimation();
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    public bool IsCanvasDeactivated()
+    {
+        return gameObject.activeInHierarchy == false;
+    }
+
 
     protected virtual void OnHideAnimationOverEvent()
     {

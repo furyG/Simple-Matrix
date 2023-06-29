@@ -27,28 +27,28 @@ public class GameUISwitcher : MonoBehaviour
     private CanvasController _activeCanvas;
     private PopupController _activePopup;
 
-    private void Awake()
+    public void Init()
     {
         popupsMap = new Dictionary<PopupType, PopupController>();
 
-        if(popupsList!= null)
+        if (popupsList != null)
         {
-            foreach(var popup in popupsList)
+            foreach (var popup in popupsList)
             {
                 popupsMap[popup.type] = popup;
             }
         }
 
         canvasesMap = new Dictionary<CanvasType, CanvasController>();
-        if(canvasesList != null)
+        if (canvasesList != null)
         {
-            foreach(var canvas in canvasesList)
+            foreach (var canvas in canvasesList)
             {
                 canvasesMap[canvas.type] = canvas;
             }
         }
 
-        canvasesList.ForEach(x=> x.gameObject.SetActive(false));
+        canvasesList.ForEach(x => x.gameObject.SetActive(false));
         popupsList.ForEach(x => x.gameObject.SetActive(false));
     }
 

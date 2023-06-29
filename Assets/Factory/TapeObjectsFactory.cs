@@ -5,10 +5,8 @@ public class TapeObjectsFactory : Singleton<TapeObjectsFactory>, IFactory
 {
     private Item[] items;
 
-    public override void Awake()
+    public void Init()
     {
-        base.Awake();
-
         items = Resources.LoadAll<Item>("Items");
     }
 

@@ -17,9 +17,9 @@ public class StateMachine
         CurrentState = state;
         state.Enter();
     }
-    public async void TransitionTo(IState nextState, ButtonType fromButton)
+    public void TransitionTo(IState nextState, ButtonType fromButton)
     {
-        await Task.Yield();
+        //await Task.Yield();
 
         CurrentState.Exit(fromButton);
         CurrentState = nextState;
@@ -30,7 +30,7 @@ public class StateMachine
     }
     public void TransitionTo(IState nextState)
     {
-        CurrentState.Exit();
+        CurrentState?.Exit();
         CurrentState = nextState;
         nextState.Enter();
 

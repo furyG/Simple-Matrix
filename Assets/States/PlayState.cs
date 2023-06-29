@@ -3,38 +3,34 @@ using Tapes;
 
 public class PlayState : IState
 {
-    private GameModeManager main;
-
-    private TapeSpawner _tapeSpawner;
+    private Board _board;
     private PointsInteractor _pointsInteractor;
     private LifesInteractor _lifesInteractor;
     private TimerInteractor _timerInteractor;
 
     public PlayState(GameModeManager main)
     {
-        this.main = main;
-
-        this._tapeSpawner = main.tapeSpawner;
+        this._board = main.board;
         this._lifesInteractor = Game.GetInteractor<LifesInteractor>();
         this._timerInteractor = Game.GetInteractor<TimerInteractor>();
         this._pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
     public void Enter(ButtonType fromButton)
     {
-        switch(fromButton)
+        switch (fromButton)
         {
             case ButtonType.Start:
-                _tapeSpawner.SpawnTapes(true);
+                _board.OnNewGame();
+                _board.StartTapesContentSpawning();
                 _pointsInteractor.ResetPoints();
-                _timerInteractor.StartRoundTimer();
                 _lifesInteractor.ResetLifes();
                 break;
             case ButtonType.Continue:
-                _tapeSpawner.SpawnTapes(false);
                 _lifesInteractor.RemoveHeartScore(this, 1);
-                _timerInteractor.StartRoundTimer();
+                _board.StartTapesContentSpawning();
                 break;
         }
+        _timerInteractor.StartRoundTimer();
     }
 
     public void Update()
@@ -44,7 +40,7 @@ public class PlayState : IState
 
     public void Exit()
     {
-        _tapeSpawner.StopTapes();
-        _tapeSpawner.ClearTapes();
+        _board.ClearTapesSpawn();
+        _timerInteractor.Stop();
     }
 }

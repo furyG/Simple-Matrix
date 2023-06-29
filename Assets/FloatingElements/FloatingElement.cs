@@ -12,7 +12,7 @@ public enum FPState
 public abstract class FloatingElement : MonoBehaviour
 {
     public List<float> fontSizes { get; set; }
-    public IFinishReportable reportFinishTo = null;
+    public IFloatingElementReportable reportFinishTo = null;
 
     private List<Vector2> bezierPts;
     private FPState state = FPState.idle;
@@ -58,7 +58,7 @@ public abstract class FloatingElement : MonoBehaviour
                 uC = 1;
                 state = FPState.post;
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             else
             {
@@ -79,5 +79,4 @@ public abstract class FloatingElement : MonoBehaviour
     protected virtual void ToggleVizualizer(bool state) { }
     protected virtual void ChangeFont(int size) { }
     protected virtual void ChangeSprite(Sprite sprite) { }
-    public virtual void ChangeScale() { }
 }

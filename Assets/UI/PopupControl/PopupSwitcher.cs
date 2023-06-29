@@ -10,7 +10,7 @@ public class PopupSwitcher : MonoBehaviour
     protected void Start()
     {
         buttonComponent = GetComponent<Button>();
-        buttonComponent.onClick.AddListener(SwitchPopup);
+        buttonComponent.AddListener(SwitchPopup);
     }
 
     protected void SwitchPopup()

@@ -17,9 +17,9 @@ public class Tile : MonoBehaviour
     {
         _tileAnimationHandler = GetComponent<TileAnimationHandler>();
         _vizualizer = GetComponent<TextMeshProUGUI>();
-        _vizualizer.color = baseColors.black;
+        _vizualizer.color = baseColors.gray;
 
-        blockerImage.color = baseColors.black;
+        blockerImage.color = baseColors.gray;
 
         tileNeigbour = new TileNeighbour(this);     
     }

@@ -2,12 +2,11 @@ using Architecture;
 using TMPro;
 using UnityEngine;
 
-public class PointsPresenter : MonoBehaviour, IFinishReportable
+public class PointsPresenter : MonoBehaviour, IFloatingElementReportable
 {
     [SerializeField] private TextMeshProUGUI pointsTxt;
 
     private PointsInteractor pointsInteractor;
-    private FloatingElementHandler<FloatingPoints> floatingPointsHandler;
 
     private void Start()
     {
@@ -32,7 +31,7 @@ public class PointsPresenter : MonoBehaviour, IFinishReportable
 
         if(pointsTxt != null)
         {
-            pointsTxt.text = "счёт: " + pointsInteractor.points.ToString();
+            pointsTxt.text = pointsInteractor.points.ToString();
         }
     }
     private void OnPointsChangedEvent(int points)

@@ -2,7 +2,7 @@ using Architecture;
 using System;
 using System.Collections.Generic;
 
-public class SceneZeroConfig : SceneConfig
+public class GameplaySceneConfig : SceneConfig
 {
     public const string SCENE_NAME = "SCENE_ZERO";
 

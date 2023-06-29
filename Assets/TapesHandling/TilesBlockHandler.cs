@@ -1,7 +1,6 @@
 using Architecture;
 using System.Collections;
 using System.Collections.Generic;
-using Tapes;
 using UnityEngine;
 
 public class TilesBlockHandler
@@ -32,7 +31,7 @@ public class TilesBlockHandler
         Coroutines.StartRoutine(ChangeBlockersPosition());
     }
 
-    public void OnTapesStop()
+    public void OnTapesClear()
     {
         Coroutines.StopRoutine(ChangeBlockersPosition());
         ClearBlockers();

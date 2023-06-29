@@ -11,7 +11,7 @@ public class CanvasSwitcher : MonoBehaviour
     protected void Awake()
     {
         _buttonComponent = GetComponent<Button>();
-        _buttonComponent.onClick.AddListener(OnButtonClicked);
+        _buttonComponent.AddListener(OnButtonClicked);
         _uISwitcher = GameModeManager.GetInstance().UISwitcher;
     }
 

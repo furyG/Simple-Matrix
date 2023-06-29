@@ -1,11 +1,10 @@
-using Architecture;
 using Tapes;
 using UnityEngine;
 
 public class GameModeManager : Singleton<GameModeManager>
 {
-    public TapeSpawner tapeSpawner => _tapeSpawner;
-    [SerializeField] private TapeSpawner _tapeSpawner;
+    public Board board => _board;
+    [SerializeField] private Board _board;
 
     public PlayerManager playerManager => _playerManager;
     private PlayerManager _playerManager;
@@ -15,21 +14,12 @@ public class GameModeManager : Singleton<GameModeManager>
 
     private StateMachine mainStateMachine;
 
-    public override void Awake()
+    public void StartGameFromMainMenu()
     {
-        base.Awake();
-
-        Game.Run();
-
         _playerManager = GetComponent<PlayerManager>();
+
         mainStateMachine = new StateMachine(this);
-    }
 
-    private void Start()
-    {
-        mainStateMachine.Initialize(mainStateMachine.mainMenuState);
-
-        ToMainMenu();
         StartCoroutine(UISwitcher.SwitchCanvasRoutine(CanvasType.mainMenu));
     }
 

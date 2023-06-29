@@ -1,4 +1,5 @@
 using Architecture;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +10,9 @@ public class TapeNumberSetter
     private List<TileNeighbour> _tileNeighbours;
     private PointsInteractor _pointsInteractor;
 
-    public TapeNumberSetter(TapeContentSpawner contentSpawner)
+    public TapeNumberSetter(List<TileNeighbour> tileNeighbours)
     {
-        _tileNeighbours = contentSpawner.tilesNeighbours;
+        _tileNeighbours = tileNeighbours;
         _pointsInteractor = Game.GetInteractor<PointsInteractor>();
     }
 
@@ -31,11 +32,24 @@ public class TapeNumberSetter
         }
     }
 
+    public void ClearAllNeighbours()
+    {
+        foreach(var neighbour in _tileNeighbours)
+        {
+            neighbour.ClearTileNumber();
+        }
+    }
+
     private void ReplaceNumberInTile(TileNeighbour closest, NumberManager lastNumber)
     {
         closest.ChangeNumberValue(lastNumber.number);
         lastNumber.gameObject.SetActive(false);
 
+        TryGetCombo(closest);
+    }
+
+    private void TryGetCombo(TileNeighbour closest)
+    {
         var comboList = closest.TryGetCombo();
 
         if (comboList != null)

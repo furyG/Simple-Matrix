@@ -2,7 +2,7 @@ using Architecture;
 using Tapes;
 using UnityEngine;
 
-public class TapeComplicationHandler
+public class BoardComplicationHandler
 {
     public int tapesAmount
     {
@@ -16,15 +16,15 @@ public class TapeComplicationHandler
     private int _tapesAmount;
 
     private int currentPointsAmount;
-    private readonly TapeSpawner _tapeSpawner;
+    private readonly Board _board;
     private readonly PointsInteractor _pointsInteractor;
     private readonly TapeSettingsConfig _tapeSettingsConfig;
     private readonly TilesBlockHandler _tilesBlockHandler;
 
 
-    public TapeComplicationHandler(TapeSpawner tapeSpawner, TilesBlockHandler tilesBlockHandler)
+    public BoardComplicationHandler(Board board, TilesBlockHandler tilesBlockHandler)
     {
-        _tapeSpawner = tapeSpawner;
+        _board = board;
 
         _pointsInteractor = Game.GetInteractor<PointsInteractor>();
         _tapeSettingsConfig = Game.GetInteractor<ConfigInteractor>().GetConfig<TapeSettingsConfig>();
@@ -65,14 +65,14 @@ public class TapeComplicationHandler
             if (currentPointsAmount >= _tapeSettingsConfig.pointsForFirstNewTape && _tapesAmount < _tapeSettingsConfig.startTapesAmount + 1)
             {
                 tapesAmount++;
-                _tapeSpawner.SpawnTape();
-                _tapeSpawner.InitializeTileNeighbours();
+                _board.SpawnTape().StartContentSpawning();
+                _board.InitializeTileNeighbours();
             }
             if (currentPointsAmount >= _tapeSettingsConfig.pointsForSecondNewTape)
             {
                 tapesAmount += 2;
-                _tapeSpawner.SpawnTape();
-                _tapeSpawner.InitializeTileNeighbours();
+                _board.SpawnTape().StartContentSpawning();
+                _board.InitializeTileNeighbours();
             }
         }
     }

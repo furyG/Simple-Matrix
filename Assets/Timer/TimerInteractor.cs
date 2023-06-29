@@ -6,7 +6,6 @@ using UnityEngine;
 public class TimerInteractor : Interactor, IBonusReciever
 {
     public event Action<float> OnTimerValueChangedEvent;
-    public event Action OnTimerFinishedEvent;
 
     public float remainingSeconds
     {
@@ -49,7 +48,6 @@ public class TimerInteractor : Interactor, IBonusReciever
         if(remainingSeconds == 0)
         {
             Debug.LogError("Timer: u are trying to start ended timer;");
-            OnTimerFinishedEvent?.Invoke();
         }
         isPaused = false;
         Subscribe();
@@ -64,18 +62,7 @@ public class TimerInteractor : Interactor, IBonusReciever
     {
         SetTime(roundTime);
         Start();
-    }
-    public void Pause()
-    {
-        isPaused = true;
-        Unsubscribe();
-        OnTimerValueChangedEvent?.Invoke(remainingSeconds);
-    }
-    public void Unpause()
-    {
-        isPaused = false;
-        Subscribe();
-        OnTimerValueChangedEvent?.Invoke(remainingSeconds);
+        Debug.Log("round time is: " + roundTime);
     }
     public void Stop()
     {
@@ -83,7 +70,6 @@ public class TimerInteractor : Interactor, IBonusReciever
         //remainingSeconds = 0;
 
         OnTimerValueChangedEvent?.Invoke(remainingSeconds);
-        OnTimerFinishedEvent?.Invoke();
     }
     private void Subscribe()
     {

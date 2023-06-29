@@ -15,8 +15,8 @@ MonoBehaviour:
   _startTapesAmount: 3
   _tilesOnTape: 6
   _spawnNumberInTime: 1
-  _pointsForFirstNewTape: 70
-  _pointsForSecondNewTape: 140
-  _pointsForBlocker: 30
-  _maxBlockersAmount: 6
-  _blockersLifeTime: 10
+  _pointsForFirstNewTape: 90
+  _pointsForSecondNewTape: 180
+  _pointsForBlocker: 40
+  _maxBlockersAmount: 7
+  _blockersLifeTime: 8

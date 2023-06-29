@@ -42,13 +42,13 @@ public class FloatingPointsHandler
         };
         fp = CreateFloatingPoints(3, fsPts);
         fp.fontSizes = new List<float> { 4, 50, 28 };
-        fp.reportFinishTo = pointsPresenter as IFinishReportable;
+        fp.reportFinishTo = pointsPresenter as IFloatingElementReportable;
     }
     public FloatingPoints CreateFloatingPoints(int amt, List<Vector2> pts)
     {
         FloatingPoints fp = TapeObjectsFactory.GetInstance().Get<FloatingPoints>(canvasTransform);
         fp.points = amt;
-        fp.reportFinishTo = pointsPresenter as IFinishReportable;
+        fp.reportFinishTo = pointsPresenter as IFloatingElementReportable;
         fp.Init(pts, 0, pointsFlyingTime);
         return fp;
     }

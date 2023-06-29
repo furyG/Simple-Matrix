@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PopupWidgetAnimator : MonoBehaviour
+public class PopupWidgetAnimator : MonoBehaviour, IAnimatableUI
 {
     public event Action OnHideAnimationOver;
     public event Action OnAppearAnimationOver;
@@ -12,18 +12,21 @@ public class PopupWidgetAnimator : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-    public void PlayHide()
+    public void PlayHideAnimation()
     {
         this.animator.SetTrigger("hide");
     }
 
-    private void AppearAnimationOver()
+    public void AppearAnimationOver()
     {
         OnAppearAnimationOver?.Invoke();
     }
 
-    private void HideAnimationOver()
+    public void HideAnimationOver()
     {
         OnHideAnimationOver?.Invoke();
     }
+
+    public void IdleAnimationOver() { }
+
 }

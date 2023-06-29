@@ -25,7 +25,7 @@ public class TapeClickHandler : Subject
     }
     private void Start()
     {
-        _button.onClick.AddListener(OnTapeClick);
+        _button.AddListener(OnTapeClick);
     }
     private void OnTapeClick()
     {

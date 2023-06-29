@@ -1,33 +1,38 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Tapes
 {
-    public class TapeSpawner : MonoBehaviour
+    public class Board : MonoBehaviour
     {
         private List<TapeManager> _tapes;
         private List<List<TileNeighbour>> _tilesMatrix;
-        private TapeComplicationHandler _complicationHandler;
+        private BoardComplicationHandler _boardComplicationHandler;
         private TilesBlockHandler _tileBlockHandler;
         private int n = 0;
 
-        private void Start()
-        {
-            _tileBlockHandler = new TilesBlockHandler();
-            _complicationHandler = new TapeComplicationHandler(this, _tileBlockHandler);
-        }
         private void OnDestroy()
         {
-            _complicationHandler?.OnDestroy();
+            _boardComplicationHandler?.OnDestroy();
         }
 
-        public void ClearTapes()
+        public void Init()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            _tileBlockHandler = new TilesBlockHandler();
+            _boardComplicationHandler = new BoardComplicationHandler(this, _tileBlockHandler);
+
+            SpawnTapes();
+        }
+
+        public void ClearTapesSpawn()
+        {
+            _tileBlockHandler.OnTapesClear();
+            foreach(var tape in _tapes)
             {
-                Destroy(transform.GetChild(i).gameObject);
+                tape.ClearTapeContent();
             }
-            n = 0;
+            StopTapesContentSpawning();
         }
         public TapeManager SpawnTape()
         {
@@ -51,28 +56,39 @@ namespace Tapes
             }
             _tileBlockHandler.tileNeighbours = _tilesMatrix;
         }
-        public void StopTapes()
+        public void StartTapesContentSpawning()
+        {
+            if (_tapes == null) return;
+            foreach(var tape in _tapes)
+            {
+                tape.StartContentSpawning();
+            }
+        }
+        public void OnNewGame()
+        {
+            ClearTapesSpawn();
+            if(_tapes.Count > 3)
+            {
+                _boardComplicationHandler.OnNewGame();
+                Destroy(_tapes.Last().gameObject);
+                _tapes.Remove(_tapes.Last());
+            }
+        }
+        private void StopTapesContentSpawning()
         {
             if (_tapes == null) return;
 
             foreach (var tape in _tapes)
             {
-                tape.StopTape();
+                tape.StopContentSpawning();
             }
-
-            _tileBlockHandler.OnTapesStop();
         }
-        public void SpawnTapes(bool newGame)
+        private void SpawnTapes()
         {
             _tilesMatrix = new List<List<TileNeighbour>>();
             _tapes = new List<TapeManager>();
 
-            if (newGame)
-            {
-                _complicationHandler.OnNewGame();
-            }
-
-            int tapesAmount = _complicationHandler.tapesAmount;
+            int tapesAmount = _boardComplicationHandler.tapesAmount;
 
             for (int i = tapesAmount - 1; i > -1; i--)
             {

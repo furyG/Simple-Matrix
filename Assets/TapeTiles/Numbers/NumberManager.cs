@@ -14,8 +14,8 @@ public class NumberManager : MonoBehaviour
     {
         numberComplicationHandler = new NumberComplicationHandler(this);
 
-        _renderer = GetComponent<NumberRenderer>();
         _typeHandler = GetComponent<ITypeChangable<NumberType>>();
+        _renderer = GetComponent<NumberRenderer>();
     }
 
     public void InitializeNumber()

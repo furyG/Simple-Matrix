@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gray:
     serializedVersion: 2
-    rgba: 4292861919
+    rgba: 4286743170
   _black:
     serializedVersion: 2
     rgba: 4280098077
-  _orange:
+  _yellow:
     serializedVersion: 2
-    rgba: 4280306658
+    rgba: 4278242815
   _backgroundWhite:
     serializedVersion: 2
     rgba: 4294440951

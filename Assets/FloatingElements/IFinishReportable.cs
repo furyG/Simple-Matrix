@@ -1,4 +1,4 @@
-public interface IFinishReportable
+public interface IFloatingElementReportable
 {
     public void FloatingElementCallBack();
 }
