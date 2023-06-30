@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private int leaderboardID = 14204;
+    private const int leaderboardID = 14204;
 
     public void SubmitScore()
     {

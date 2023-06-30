@@ -75,6 +75,22 @@ MonoBehaviour:
     m_Key: score
     m_Metadata:
       m_Items: []
+  - m_Id: 16926442065088512
+    m_Key: rule
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16928043957866496
+    m_Key: correct combo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16928175763869696
+    m_Key: incorrect combo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16929261732089856
+    m_Key: rules big text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

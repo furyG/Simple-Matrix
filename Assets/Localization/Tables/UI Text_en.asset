@@ -78,6 +78,27 @@ MonoBehaviour:
     m_Localized: 'score:'
     m_Metadata:
       m_Items: []
+  - m_Id: 16926442065088512
+    m_Localized: Rules
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16928043957866496
+    m_Localized: <- Numbers differ by less than 1, it is combo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16928175763869696
+    m_Localized: <- Numbers differ by more than 1, no combos.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16929261732089856
+    m_Localized: 'Stop the number on a certain cell - LMB on the selected tape.
+
+
+      To
+      score points, you need to collect combos. Combo - 3 or more adjacent numbers
+      that differ in value from the neighbor by 1.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

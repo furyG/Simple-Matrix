@@ -9,7 +9,6 @@ public class AudioRepository : Repository
     public override void Initialize()
     {
         _soundsContainer = Resources.Load<SoundsContainer>("Sounds/SoundsContainer");
-        Debug.Log(_soundsContainer);
     }
 
     public override void Save()
