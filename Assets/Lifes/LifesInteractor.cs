@@ -42,7 +42,7 @@ public class LifesInteractor : Interactor, IBonusReciever
 
         heartScoreChanged?.Invoke(heartScore);
     }
-    public bool IsEnoughLifes() => heartScore >= 1;
+    public bool IsEnoughLifes(int compare) => heartScore >= compare;
 
     public void ResetLifes()
     {
